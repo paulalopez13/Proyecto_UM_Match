@@ -70,3 +70,23 @@ quitar_preferencia(CI, Atributo) :-
     quitar(pref(Atributo, _), ListaVieja, ListaNueva), %pref(Atributo, _) no importa el valor que tenia pq lo quiero eliminar
     retract(perfil_preferencia(CI, ListaVieja)),
     assert(perfil_preferencia(CI, ListaNueva)).
+
+% Cambia el valor de UNA preferencia.
+actualizar_preferencia(CI, Atributo, NuevoValor) :-
+    perfil_preferencia(CI, ListaVieja),
+    quitar(pref(Atributo, _), ListaVieja, ListaSinVieja),       % saco la preferencia vieja
+    ListaNueva = [pref(Atributo, NuevoValor) | ListaSinVieja],  % agrego la nueva adelante
+    retract(perfil_preferencia(CI, ListaVieja)),
+    assert(perfil_preferencia(CI, ListaNueva)).
+
+% Cambia el rango de UNA preferencia.
+actualizar_rango(CI, Atributo, Min, Max) :-
+    perfil_preferencia(CI, ListaVieja),
+    quitar(pref_rango(Atributo, _, _), ListaVieja, ListaSinVieja),
+    ListaNueva = [pref_rango(Atributo, Min, Max) | ListaSinVieja],
+    retract(perfil_preferencia(CI, ListaVieja)),
+    assert(perfil_preferencia(CI, ListaNueva)).
+
+% Listar todos los perfiles
+listar_perfiles(ListaCIs) :-
+    findall(CI, perfil_nombre(CI, _), ListaCIs). % findall busca todos los CI que tengan un perfil_nombre y los devuelve en una lista
