@@ -1,5 +1,10 @@
 % Modulo de calculo de compatibilidad 
 
+:- consult(perfiles).
+:- consult(compatibilidad).
+:- consult(opciones).
+
+
 % coincide(+Preferencia, +Caracteristicas, -NombreAtributo)
 %
 % Verdadero si la caracteristica del otro perfil cumple la
@@ -10,6 +15,7 @@
 %
 %   pref_rango(Atributo, Min, Max):
 %   (atributos numericos: edad, altura)
+
 
 coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
     Buscado =.. [Atributo, Valor], % construye dinamicamente 
@@ -98,7 +104,7 @@ compatibles_de(CI_usuario, Compatibles) :-
     perfil_preferencia(CI_usuario, Preferencias),
     member(pref(busca_sexo, SexoBuscado), Preferencias),  % extraigo qué sexo busca el usuario
     findall(CI_otro,
-            (   perfil_caracteristicas(CI_otro, _),
+            (   perfil_caracteristicas(CI_otro, CaractOtro),
                 CI_otro \= CI_usuario,
                 member(sexo(SexoBuscado), CaractOtro),    % el otro tiene ese sexo
                 es_compatible(CI_usuario, CI_otro)

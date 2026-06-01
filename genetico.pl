@@ -9,6 +9,10 @@
 % Asume cargados: perfiles.pl, opciones.pl, compatibilidad.pl
 % ============================================================
 
+:- consult(perfiles).
+:- consult(compatibilidad).
+
+
 ag_poblacion(20).
 ag_generaciones(30).
 ag_mutacion(0.3).
