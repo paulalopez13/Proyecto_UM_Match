@@ -1,3 +1,5 @@
+:- consult('perfiles.pl').
+
 % Sexo (2)
 opcion_valida(sexo, masculino).
 opcion_valida(sexo, femenino).
