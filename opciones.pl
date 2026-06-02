@@ -133,3 +133,4 @@ umbral_personal(CI, Umbral) :-
     puntaje_maximo_personal(CI, Max),
     umbral_porcentaje(Porc),
     Umbral is (Max * Porc) / 100. 
+    
