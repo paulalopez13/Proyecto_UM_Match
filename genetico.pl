@@ -56,34 +56,23 @@ limpiar_pool([CI|Resto], Pool, Excluidos) :-
        Excluidos = [CI|ExcluidosResto]
     ).
 
-% tiene_candidato_valido(+CI, +OtrosCIs)
-%
-% Verdadero si existe alguien en OtrosCIs con quien CI
-% tenga compatibilidad mutua de sexo.
 
 tiene_candidato_valido(CI, Otros) :-
     member(Otro, Otros),
-    sexo_mutuo_ok(CI, Otro),
-    !.  % con uno alcanza
+    filtros_mutuos_ok(CI, Otro),
+    !.
+
+% Verdadero si CI1 y CI2 se pasan los 4 filtros mutuamente.
+% Delega en pasa_filtros/2 de compatibilidad.pl.
+
+filtros_mutuos_ok(CI1, CI2) :-
+    pasa_filtros(CI1, CI2),
+    pasa_filtros(CI2, CI1).
 
 
-sexo_mutuo_ok(CI1, CI2) :-
-    perfil_preferencia(CI1, Prefs1),
-    perfil_preferencia(CI2, Prefs2),
-    perfil_caracteristicas(CI1, Caract1),
-    perfil_caracteristicas(CI2, Caract2),
-    member(pref(busca_sexo, SexoBuscado1), Prefs1),
-    member(pref(busca_sexo, SexoBuscado2), Prefs2),
-    member(sexo(SexoBuscado1), Caract2),  % CI2 tiene el sexo que busca CI1
-    member(sexo(SexoBuscado2), Caract1).  % CI1 tiene el sexo que busca CI2
 
+% AJUSTAR SI EL POOL ES IMPAR
 
-% ============================================================
-% PASO 3: AJUSTAR SI EL POOL ES IMPAR
-% ============================================================
-
-% ajustar_pool(+Pool, -PoolFinal, -SinPareja)
-%
 % Si el pool tiene cantidad impar de personas, saca al menos
 % compatible globalmente. Si es par, no hace nada.
 
@@ -97,8 +86,8 @@ ajustar_pool(Pool, PoolFinal, SinPareja) :-
        SinPareja = ninguno
     ).
 
-% menos_compatible_global(+Pool, -CI)
-%
+
+
 % Devuelve el CI cuya suma de compatibilidad mutua con sus
 % candidatos validos del pool es la mas baja.
 
@@ -114,23 +103,20 @@ menos_compatible_global([P|Ps], PeorAct, SPeor, Peor) :-
     ;  menos_compatible_global(Ps, PeorAct, SPeor, Peor)
     ).
 
-% suma_compat_global(+CI, +Pool, -Suma)
-%
+
 % Suma la compatibilidad mutua de CI con todos los candidatos
 % validos en sexo que hay en el pool (excluyendose a si mismo).
-
 suma_compat_global(CI, Pool, Suma) :-
     findall(M,
             (   member(Otro, Pool),
                 Otro \= CI,
-                sexo_mutuo_ok(CI, Otro),
+                filtros_mutuos_ok(CI, Otro),
                 compat_mutua(CI, Otro, M)
             ),
             Mutuas),
     sumlist(Mutuas, Suma).
 
-% compat_mutua(+CI1, +CI2, -M)
-%
+
 % Compatibilidad ida + vuelta, porque compatible/3 es asimetrico.
 
 compat_mutua(A, B, M) :-
@@ -139,12 +125,9 @@ compat_mutua(A, B, M) :-
     M is Ida + Vuelta.
 
 
-% ============================================================
 % ALGORITMO GENETICO
-% ============================================================
 
-% correr_genetico(+Pool, -MejorAsignacion)
-%
+
 % Genera la poblacion inicial, evoluciona y devuelve la mejor
 % asignacion encontrada.
 
@@ -154,8 +137,7 @@ correr_genetico(Pool, Mejor) :-
     ag_generaciones(NumGen),
     evolucionar(NumGen, Pob, Mejor).
 
-% poblacion_inicial(+N, +Pool, -Poblacion)
-%
+
 % Genera N cromosomas aleatorios. Cada cromosoma es una
 % asignacion completa: una lista de pares (A, B).
 
@@ -166,16 +148,14 @@ poblacion_inicial(N, Pool, [Ind|Resto]) :-
     N1 is N - 1,
     poblacion_inicial(N1, Pool, Resto).
 
-% asignacion_aleatoria(+Pool, -Asignacion)
-%
+
 % Mezcla el pool al azar y arma pares de a dos.
 
 asignacion_aleatoria(Pool, Asignacion) :-
     random_permutation(Pool, Mezclado),
     armar_pares(Mezclado, Asignacion).
 
-% armar_pares(+Lista, -Pares)
-%
+
 % Toma la lista de a dos y forma parejas.
 % Caso base: lista vacia, no quedan pares.
 
@@ -186,10 +166,9 @@ armar_pares([A, B | Resto], [(A, B) | OtrosPares]) :-
 
 % --- FITNESS ---
 
-% fitness(+Asignacion, -F)
+
 %
-% El fitness de una asignacion es la suma de compatibilidad
-% mutua de todos sus pares. Cuanto mayor, mejor.
+%  suma de compatibilidad mutua de todos sus pares. Cuanto mayor, mejor.
 
 fitness(Asignacion, F) :-
     fitness_acum(Asignacion, 0, F).
@@ -201,7 +180,7 @@ fitness_acum([(A, B) | Resto], Acum, F) :-
     fitness_acum(Resto, NuevoAcum, F).
 
 
-% --- EVOLUCION ---
+% EVOLUCION 
 
 evolucionar(0, Pob, Mejor) :- !, mejor_de(Pob, Mejor).
 evolucionar(N, Pob, Mejor) :-
@@ -228,7 +207,7 @@ generar_hijos(N, Pob, [Hijo | Resto]) :-
     generar_hijos(N1, Pob, Resto).
 
 
-% --- SELECCION POR TORNEO ---
+% SELECCION POR TORNEO ---
 
 % seleccion(+Pob, -Ganador)
 %
@@ -306,8 +285,11 @@ mutar_swap(Ind, Mut) :-
        I \= J,
        nth0(I, Ind, (A1, B1)),
        nth0(J, Ind, (A2, B2)),
-       reemplazar(Ind, I, (A1, B2), Tmp),  % intercambio un integrante
-       reemplazar(Tmp, J, (A2, B1), Mut)
+       ( filtros_mutuos_ok(A1, B2), filtros_mutuos_ok(A2, B1)
+       -> reemplazar(Ind, I, (A1, B2), Tmp),
+          reemplazar(Tmp, J, (A2, B1), Mut)
+       ;  Mut = Ind
+       )
     ;  Mut = Ind
     ).
 

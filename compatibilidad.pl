@@ -1,49 +1,101 @@
-% Modulo de calculo de compatibilidad 
+% Modulo de calculo de compatibilidad
 
 :- consult(perfiles).
 :- consult(compatibilidad).
 :- consult(opciones).
 
 
+% ============================================================
 % coincide(+Preferencia, +Caracteristicas, -NombreAtributo)
-%
+% ============================================================
 % Verdadero si la caracteristica del otro perfil cumple la
-% preferencia. si coincide, devuelve el nombre del atributo
+% preferencia. Si coincide, devuelve el nombre del atributo.
 %
 %   pref(Atributo, Valor):
 %   (comparacion por igualdad -> atributos categoricos)
 %
 %   pref_rango(Atributo, Min, Max):
 %   (atributos numericos: edad, altura)
-
+% ============================================================
 
 coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
-    Buscado =.. [Atributo, Valor], % construye dinamicamente 
-    member(Buscado, Caracteristicas). % miro la lista de caracteristicas hasta haya algo con el nombre del atributo
+    Buscado =.. [Atributo, Valor],
+    member(Buscado, Caracteristicas).
 
 coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
-    Buscado =.. [Atributo, ValorOtro], 
+    Buscado =.. [Atributo, ValorOtro],
     member(Buscado, Caracteristicas),
     ValorOtro >= Min,
     ValorOtro =< Max.
 
-% compatible(+CI_usuario, +CI_otro, -Puntaje)
+
+% ============================================================
+% FILTROS EXCLUYENTES
+% ============================================================
+% Antes de calcular puntaje, el perfil tiene que pasar los 4
+% filtros. Si alguno falla, no es compatible y no entra al calculo.
 %
-% Calcula el puntaje que CI_otro obtiene segun las
-% preferencias de CI_usuario, sumando atributo por atributo
+% Los 4 filtros son:
+%   1. sexo:  el sexo del otro debe coincidir con busca_sexo.
+%   2. fuma:  el fuma del otro debe coincidir con busca_fuma.
+%   3. toma:  el toma del otro debe coincidir con busca_toma.
+%   4. signo: el signo del otro NO debe estar en excluye_signo.
+% ============================================================
+
+% pasa_filtros(+CI_usuario, +CI_otro)
+% Verdadero si CI_otro pasa los 4 filtros del CI_usuario.
+
+pasa_filtros(CI_usuario, CI_otro) :-
+    perfil_preferencia(CI_usuario, Preferencias),
+    perfil_caracteristicas(CI_otro, Caracteristicas),
+    pasa_filtro_sexo(Preferencias, Caracteristicas),
+    pasa_filtro_fuma(Preferencias, Caracteristicas),
+    pasa_filtro_toma(Preferencias, Caracteristicas),
+    pasa_filtro_signo(Preferencias, Caracteristicas).
+
+pasa_filtro_sexo(Preferencias, Caracteristicas) :-
+    member(pref(busca_sexo, SexoBuscado), Preferencias),
+    member(sexo(SexoOtro), Caracteristicas),
+    SexoBuscado == SexoOtro.
+
+pasa_filtro_fuma(Preferencias, Caracteristicas) :-
+    member(pref(busca_fuma, FumaBuscado), Preferencias),
+    member(fuma(FumaOtro), Caracteristicas),
+    FumaBuscado == FumaOtro.
+
+pasa_filtro_toma(Preferencias, Caracteristicas) :-
+    member(pref(busca_toma, TomaBuscado), Preferencias),
+    member(toma(TomaOtro), Caracteristicas),
+    TomaBuscado == TomaOtro.
+
+% el signo del otro NO debe estar en la lista de excluidos
+pasa_filtro_signo(Preferencias, Caracteristicas) :-
+    member(pref(excluye_signo, ListaExcluidos), Preferencias),
+    member(signo(SignoOtro), Caracteristicas),
+    \+ member(SignoOtro, ListaExcluidos).
+
+
+% ============================================================
+% compatible(+CI_usuario, +CI_otro, -Puntaje)
+% ============================================================
+% Calcula el puntaje que CI_otro obtiene segun las preferencias
+% de CI_usuario. Primero pasa los 4 filtros; si falla alguno,
+% no es compatible. Si los pasa, suma los puntos atributo por atributo.
+% ============================================================
 
 compatible(CI_usuario, CI_otro, Puntaje) :-
+    pasa_filtros(CI_usuario, CI_otro),
     perfil_preferencia(CI_usuario, Preferencias),
     perfil_caracteristicas(CI_otro, Caracteristicas),
     sumar_puntaje(Preferencias, Caracteristicas, 0, Puntaje).
 
+
 % sumar_puntaje(+Preferencias, +Caracteristicas, +Acumulado, -Total)
-% Recorre las preferencias de a una, usamos recursion con acumulador
+% Recorre las preferencias de a una, usamos recursion con acumulador.
 % Si la preferencia coincide, suma el peso de ese atributo;
 % si no coincide, deja el acumulado igual.
 
-sumar_puntaje([], _, Total, Total). % cuando ya no quedan preferencias termino 
-% el acumulado pasa a ser el total y lo que queda en caracteristicas, no me importa 
+sumar_puntaje([], _, Total, Total). % cuando ya no quedan preferencias termino
 
 sumar_puntaje([Pref|Resto], Caracteristicas, Acumulado, Total) :-
     (   coincide(Pref, Caracteristicas, Atributo),
@@ -61,23 +113,28 @@ puntaje_de(CI1, CI2, Puntaje) :-
     compatible(CI1, CI2, Puntaje).
 
 
+% ============================================================
 % es_compatible(+CI1, +CI2)
-% Verdadero si el puntaje alcanza o supera el umbral.
-% umbral/1 esta definido en opciones.pl (ej: umbral(13.2)).
-% ------------------------------------------------------------
+% ============================================================
+% Verdadero si pasa los 4 filtros Y el puntaje alcanza o supera
+% el umbral personalizado del usuario.
+% ============================================================
+
 es_compatible(CI1, CI2) :-
     compatible(CI1, CI2, Puntaje),
-    umbral_puntaje(Umbral), 
+    umbral_personal(CI1, Umbral),
     Puntaje >= Umbral.
 
 
-% ------------------------------------------------------------
+% ============================================================
 % por_que_compatible(+CI1, +CI2, -ListaAtributos)
-%
+% ============================================================
 % Devuelve la lista de atributos en los que CI2 cumple las
-% preferencias de CI1
+% preferencias de CI1 (para explicabilidad en la interfaz).
+% ============================================================
 
 por_que_compatible(CI1, CI2, Atributos) :-
+    pasa_filtros(CI1, CI2),
     perfil_preferencia(CI1, Preferencias),
     perfil_caracteristicas(CI2, Caracteristicas),
     coincidencias(Preferencias, Caracteristicas, Atributos).
@@ -93,20 +150,18 @@ coincidencias([_|Resto], Caracteristicas, Otros) :-
     coincidencias(Resto, Caracteristicas, Otros).
 
 
-% ------------------------------------------------------------
+% ============================================================
 % compatibles_de(+CI_usuario, -ListaCompatibles)
-%
+% ============================================================
 % Devuelve TODOS los perfiles compatibles con CI_usuario
-% (todos los que superan el umbral), excluyendo a si mismo.
-% Aca se enganchara mas adelante el pre-filtro por sexo.
-% ------------------------------------------------------------
+% (todos los que pasan los filtros y superan el umbral),
+% excluyendo a si mismo.
+% ============================================================
+
 compatibles_de(CI_usuario, Compatibles) :-
-    perfil_preferencia(CI_usuario, Preferencias),
-    member(pref(busca_sexo, SexoBuscado), Preferencias),  % extraigo qué sexo busca el usuario
     findall(CI_otro,
-            (   perfil_caracteristicas(CI_otro, CaractOtro),
+            (   perfil_caracteristicas(CI_otro, _),
                 CI_otro \= CI_usuario,
-                member(sexo(SexoBuscado), CaractOtro),    % el otro tiene ese sexo
                 es_compatible(CI_usuario, CI_otro)
             ),
             Compatibles).
