@@ -17,19 +17,19 @@ obtener_caracteristica(CI, Atributo, Valor) :-
     member(Termino, Lista). % recorre la lista de características del perfil para encontrar el término construido
 
 % Remplazar recursivo
-%caso base: si el elemento a reemplazar es el primero de la lista
-reemplazar(Viejo, Nuevo, [Viejo|Resto], [Nuevo|Resto]).
+%caso base: si el elemento a remplazar_elemento es el primero de la lista
+remplazar_elemento(Viejo, Nuevo, [Viejo|Resto], [Nuevo|Resto]).
 
-%caso recursivo: si el elemento a reemplazar no es el primero de la lista
-reemplazar(Viejo, Nuevo, [Otro|Resto], [Otro|RestoNuevo]) :-
-    reemplazar(Viejo, Nuevo, Resto, RestoNuevo). % Resto es una lista en si
+%caso recursivo: si el elemento a remplazar_elemento no es el primero de la lista
+remplazar_elemento(Viejo, Nuevo, [Otro|Resto], [Otro|RestoNuevo]) :-
+    remplazar_elemento(Viejo, Nuevo, Resto, RestoNuevo). % Resto es una lista en si
 
 % Los hechos son inmutables, por eso hay que eliminar el viejo y agregar el nuevo.
 actualizar_caracteristica(CI, Atributo, NuevoValor) :-
     perfil_caracteristicas(CI, ListaVieja),
     TerminoViejo =.. [Atributo, _], % es una variable anonima, porque no importa el valor que tenia el atributo en el perfil
     TerminoNuevo =.. [Atributo, NuevoValor], % construyo un término con el nombre del atributo y el nuevo valor a asignar
-    reemplazar(TerminoViejo, TerminoNuevo, ListaVieja, ListaNueva),
+    remplazar_elemento(TerminoViejo, TerminoNuevo, ListaVieja, ListaNueva),
     retract(perfil_caracteristicas(CI, ListaVieja)),
     assert(perfil_caracteristicas(CI, ListaNueva)).
 
