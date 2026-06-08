@@ -32,18 +32,19 @@ coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
 % ============================================================
 % FILTROS EXCLUYENTES
 % ============================================================
-% Antes de calcular puntaje, el perfil tiene que pasar los 4
+% Antes de calcular puntaje, el perfil tiene que pasar los 5
 % filtros. Si alguno falla, no es compatible y no entra al calculo.
 %
-% Los 4 filtros son:
-%   1. sexo:  el sexo del otro debe coincidir con busca_sexo.
-%   2. fuma:  el fuma del otro debe coincidir con busca_fuma.
-%   3. toma:  el toma del otro debe coincidir con busca_toma.
-%   4. signo: el signo del otro NO debe estar en excluye_signo.
+% Los 5 filtros son:
+%   1. sexo:         el sexo del otro debe coincidir con busca_sexo.
+%   2. fuma:         el fuma del otro debe coincidir con busca_fuma.
+%   3. toma:         el toma del otro debe coincidir con busca_toma.
+%   4. estado_civil: el estado_civil del otro debe coincidir con busca_estado_civil.
+%   5. signo:        el signo del otro NO debe estar en excluye_signo.
 % ============================================================
 
 % pasa_filtros(+CI_usuario, +CI_otro)
-% Verdadero si CI_otro pasa los 4 filtros del CI_usuario.
+% Verdadero si CI_otro pasa los 5 filtros del CI_usuario.
 
 pasa_filtros(CI_usuario, CI_otro) :-
     perfil_preferencia(CI_usuario, Preferencias),
@@ -51,6 +52,7 @@ pasa_filtros(CI_usuario, CI_otro) :-
     pasa_filtro_sexo(Preferencias, Caracteristicas),
     pasa_filtro_fuma(Preferencias, Caracteristicas),
     pasa_filtro_toma(Preferencias, Caracteristicas),
+    pasa_filtro_estado_civil(Preferencias, Caracteristicas),
     pasa_filtro_signo(Preferencias, Caracteristicas).
 
 pasa_filtro_sexo(Preferencias, Caracteristicas) :-
@@ -68,6 +70,11 @@ pasa_filtro_toma(Preferencias, Caracteristicas) :-
     member(toma(TomaOtro), Caracteristicas),
     TomaBuscado == TomaOtro.
 
+pasa_filtro_estado_civil(Preferencias, Caracteristicas) :-
+    member(pref(busca_estado_civil, EstadoBuscado), Preferencias),
+    member(estado_civil(EstadoOtro), Caracteristicas),
+    EstadoBuscado == EstadoOtro.
+
 % el signo del otro NO debe estar en la lista de excluidos
 pasa_filtro_signo(Preferencias, Caracteristicas) :-
     member(pref(excluye_signo, ListaExcluidos), Preferencias),
@@ -79,7 +86,7 @@ pasa_filtro_signo(Preferencias, Caracteristicas) :-
 % compatible(+CI_usuario, +CI_otro, -Puntaje)
 % ============================================================
 % Calcula el puntaje que CI_otro obtiene segun las preferencias
-% de CI_usuario. Primero pasa los 4 filtros; si falla alguno,
+% de CI_usuario. Primero pasa los 5 filtros; si falla alguno,
 % no es compatible. Si los pasa, suma los puntos atributo por atributo.
 % ============================================================
 
@@ -116,7 +123,7 @@ puntaje_de(CI1, CI2, Puntaje) :-
 % ============================================================
 % es_compatible(+CI1, +CI2)
 % ============================================================
-% Verdadero si pasa los 4 filtros Y el puntaje alcanza o supera
+% Verdadero si pasa los 5 filtros Y el puntaje alcanza o supera
 % el umbral personalizado del usuario.
 % ============================================================
 

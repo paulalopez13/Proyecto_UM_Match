@@ -4,6 +4,12 @@
 opcion_valida(sexo, masculino).
 opcion_valida(sexo, femenino).
 
+% Estados civiles (4)
+opcion_valida(estado_civil, soltero).
+opcion_valida(estado_civil, casado).    
+opcion_valida(estado_civil, divorciado).
+opcion_valida(estado_civil, viudo).
+
 % Departamentos de Uruguay (19)
 opcion_valida(departamento, artigas).
 opcion_valida(departamento, canelones).
