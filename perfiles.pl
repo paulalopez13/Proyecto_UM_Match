@@ -2,6 +2,10 @@
 :- dynamic(perfil_preferencia/2).
 :- dynamic(perfil_nombre/2).
 
+:- discontiguous perfil_nombre/2.
+:- discontiguous perfil_caracteristicas/2.
+:- discontiguous perfil_preferencia/2.
+
 % --- 48217954 - Camila ---
 perfil_nombre(48217954, camila).
 perfil_caracteristicas(48217954, [

@@ -12,9 +12,13 @@
 :- consult(compatibilidad).
 :- consult(opciones).
 
+:- discontiguous perfil_nombre/2.
+:- discontiguous perfil_caracteristicas/2.
+:- discontiguous perfil_preferencia/2.
+
 % parametros del algoritmo genetico
-ag_poblacion(20).
-ag_generaciones(50).
+ag_poblacion(5).
+ag_generaciones(10).
 ag_mutacion(0.2).
 
 
