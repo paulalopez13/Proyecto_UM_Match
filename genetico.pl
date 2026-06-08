@@ -8,10 +8,6 @@
 % Asume cargados: perfiles.pl, opciones.pl, compatibilidad.pl
 % ============================================================
 
-:- consult(perfiles).
-:- consult(compatibilidad).
-:- consult(opciones).
-
 :- discontiguous perfil_nombre/2.
 :- discontiguous perfil_caracteristicas/2.
 :- discontiguous perfil_preferencia/2.

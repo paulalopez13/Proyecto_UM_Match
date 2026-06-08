@@ -1,9 +1,5 @@
 % Modulo de calculo de compatibilidad
 
-:- consult(perfiles).
-:- consult(compatibilidad).
-:- consult(opciones).
-
 
 % ============================================================
 % coincide(+Preferencia, +Caracteristicas, -NombreAtributo)

@@ -1,4 +1,3 @@
-:- consult('perfiles.pl').
 
 % Sexo (2)
 opcion_valida(sexo, masculino).
@@ -84,6 +83,14 @@ opcion_valida(cita_ideal, paseo_parque).
 opcion_valida(cita_ideal, shopping).
 opcion_valida(cita_ideal, aventura).
 opcion_valida(cita_ideal, fiesta).
+
+%Fuma (2)
+opcion_valida(fuma, si).
+opcion_valida(fuma, no).
+
+%Toma (2)
+opcion_valida(toma, si).
+opcion_valida(toma, no).
 
 % Total maximo posible: 4+4+4+3+2+2+1+1+1 = 22 puntos
 
