@@ -1,6 +1,14 @@
+:- consult('perfiles.pl').
+
 % Sexo (2)
 opcion_valida(sexo, masculino).
 opcion_valida(sexo, femenino).
+
+% Estados civiles (4)
+opcion_valida(estado_civil, soltero).
+opcion_valida(estado_civil, casado).    
+opcion_valida(estado_civil, divorciado).
+opcion_valida(estado_civil, viudo).
 
 % Departamentos de Uruguay (19)
 opcion_valida(departamento, artigas).
@@ -78,8 +86,6 @@ opcion_valida(cita_ideal, aventura).
 opcion_valida(cita_ideal, fiesta).
 
 % Total maximo posible: 4+4+4+3+2+2+1+1+1 = 22 puntos
-% NOTA: sexo NO tiene peso porque es un FILTRO, no suma puntos.
-% Si dos perfiles no pasan el filtro de sexo, no se evaluan.
 
 peso(edad, 4).
 peso(altura, 4).
@@ -103,11 +109,10 @@ es_valida(Atributo, Valor) :-
 
 % Cada usuario tiene su propio puntaje maximo y umbral, que
 % dependen de las preferencias que el haya declarado.
-%
 % Ejemplo:
-%   - Si Joaquina declara los 9 atributos -> max = 22.
-%   - Si Bruno solo declara departamento (4) y deporte (2)
-%     -> max = 6, umbral = 3.6.
+%   Si Joaquina declara los 9 atributos -> max = 22.
+%   Si Bruno solo declara departamento (4) y deporte (2)
+%   max = 6, umbral = 3.6.
 
 % Dos perfiles son compatibles si el puntaje supera este porcentaje del puntaje maximo.
 umbral_porcentaje(60).
@@ -133,3 +138,4 @@ umbral_personal(CI, Umbral) :-
     puntaje_maximo_personal(CI, Max),
     umbral_porcentaje(Porc),
     Umbral is (Max * Porc) / 100. 
+    

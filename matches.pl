@@ -1,3 +1,8 @@
+
+:- consult('perfiles.pl').
+:- consult('logica.pl').
+
+
 :- dynamic(like/2).   
 :- dynamic(match/2).   
 
@@ -48,7 +53,7 @@ verificar_match(CI1, CI2) :-
     !,
     assertz(match(CI1, CI2)).
     %agrego un hecho a la base de datos. es decir, crea el match.
-verificar_match(_, _).
+verificar_match(_, _). 
 
 % True si CI1 y CI2 tienen match, sin importar el orden.
 son_match(CI1, CI2) :-
