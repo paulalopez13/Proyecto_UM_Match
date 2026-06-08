@@ -18,10 +18,6 @@ ag_generaciones(50).
 ag_mutacion(0.2).
 
 
-% ============================================================
-% PREDICADO PRINCIPAL
-% ============================================================
-
 % matching_global(-Asignacion)
 %
 % Punto de entrada. Agarra todos los perfiles, limpia el pool,
@@ -41,27 +37,13 @@ matching_global(Asignacion) :-
     ).
 
 
-% ============================================================
-% PASO 1: OBTENER TODOS LOS USUARIOS
-% ============================================================
-
-% todos_los_usuarios(-Lista)
-%
-% Junta todos los CI que tienen perfil_preferencia definido.
-
 todos_los_usuarios(Lista) :-
     findall(CI, perfil_preferencia(CI, _), Lista).
 
 
-% ============================================================
-% PASO 2: LIMPIAR EL POOL
-% ============================================================
-
-% limpiar_pool(+Todos, -Pool, -Excluidos)
-%
 % Saca a quienes no tienen ningun candidato valido en sexo.
 % Un candidato es valido si el sexo de cada uno coincide con
-% lo que el otro busca (compatibilidad mutua de sexo).
+% lo que el otro busca.
 
 limpiar_pool([], [], []).
 limpiar_pool([CI|Resto], Pool, Excluidos) :-
@@ -84,9 +66,6 @@ tiene_candidato_valido(CI, Otros) :-
     sexo_mutuo_ok(CI, Otro),
     !.  % con uno alcanza
 
-% sexo_mutuo_ok(+CI1, +CI2)
-%
-% Verdadero si CI1 busca el sexo de CI2 Y CI2 busca el sexo de CI1.
 
 sexo_mutuo_ok(CI1, CI2) :-
     perfil_preferencia(CI1, Prefs1),
