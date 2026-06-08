@@ -57,7 +57,7 @@ mostrar_lista_con_separador([X], _) :-
 % caso 3 (recursivo): lista con más de un elemento
 mostrar_lista_con_separador([H|T], Separador) :- 
   write(H), write(Separador),
-  mostrar_lista_con_separador([T], Separador).
+  mostrar_lista_con_separador(T, Separador).
 
 
 % - - - - - - - - - - - - - - - - - - - - - - - -
