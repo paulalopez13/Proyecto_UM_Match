@@ -14,6 +14,8 @@
 %   (atributos numericos: edad, altura)
 % ============================================================
 
+
+
 coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
     Buscado =.. [Atributo, Valor],
     member(Buscado, Caracteristicas).
@@ -54,22 +56,22 @@ pasa_filtros(CI_usuario, CI_otro) :-
 pasa_filtro_sexo(Preferencias, Caracteristicas) :-
     member(pref(busca_sexo, SexoBuscado), Preferencias),
     member(sexo(SexoOtro), Caracteristicas),
-    SexoBuscado == SexoOtro.
+    SexoBuscado == SexoOtro, !.
 
 pasa_filtro_fuma(Preferencias, Caracteristicas) :-
     member(pref(busca_fuma, FumaBuscado), Preferencias),
     member(fuma(FumaOtro), Caracteristicas),
-    FumaBuscado == FumaOtro.
+    FumaBuscado == FumaOtro, !.
 
 pasa_filtro_toma(Preferencias, Caracteristicas) :-
     member(pref(busca_toma, TomaBuscado), Preferencias),
     member(toma(TomaOtro), Caracteristicas),
-    TomaBuscado == TomaOtro.
+    TomaBuscado == TomaOtro, !.
 
 pasa_filtro_estado_civil(Preferencias, Caracteristicas) :-
     member(pref(busca_estado_civil, EstadoBuscado), Preferencias),
     member(estado_civil(EstadoOtro), Caracteristicas),
-    EstadoBuscado == EstadoOtro.
+    EstadoBuscado == EstadoOtro, !.
 
 % el signo del otro NO debe estar en la lista de excluidos
 pasa_filtro_signo(Preferencias, Caracteristicas) :-
