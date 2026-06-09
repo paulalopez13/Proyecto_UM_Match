@@ -1187,3 +1187,1557 @@ perfil_preferencia(55876234, [
     pref(deporte, basketball),
     pref(cita_ideal, merienda)
 ]).
+
+% --- 45152526 - Valentino ---
+perfil_nombre(45152526, valentino).
+perfil_caracteristicas(45152526, [
+    edad(30),
+    altura(183),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(economia),
+    signo(aries),
+    deporte(futbol),
+    cita_ideal(cena)
+]).
+perfil_preferencia(45152526, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 24, 30),
+    pref(departamento, montevideo),
+    pref(carrera, economia),
+    pref(cita_ideal, cena)
+]).
+
+% --- 45221997 - Emilia ---
+perfil_nombre(45221997, emilia).
+perfil_caracteristicas(45221997, [
+    edad(28),
+    altura(164),
+    departamento(canelones),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_claro),
+    carrera(comunicacion),
+    signo(acuario),
+    deporte(voleyball),
+    cita_ideal(cine)
+]).
+perfil_preferencia(45221997, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 25, 33),
+    pref(departamento, canelones),
+    pref(cita_ideal, cine)
+]).
+
+% --- 45408395 - Maximiliano ---
+perfil_nombre(45408395, maximiliano).
+perfil_caracteristicas(45408395, [
+    edad(31),
+    altura(179),
+    departamento(salto),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(derecho),
+    signo(tauro),
+    deporte(rugby),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(45408395, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 24, 31),
+    pref(departamento, salto),
+    pref(deporte, rugby)
+]).
+
+% --- 45828318 - Isabella ---
+perfil_nombre(45828318, isabella).
+perfil_caracteristicas(45828318, [
+    edad(26),
+    altura(169),
+    departamento(maldonado),
+    sexo(femenino),
+    fuma(no),
+    toma(no),
+    ojos(azul),
+    pelo(rubio),
+    carrera(ingenieria),
+    signo(geminis),
+    deporte(basketball),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(45828318, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, [escorpio, virgo]),
+    pref_rango(edad, 24, 30),
+    pref(deporte, basketball),
+    pref(cita_ideal, aventura)
+]).
+
+% --- 46198062 - Rodrigo ---
+perfil_nombre(46198062, rodrigo).
+perfil_caracteristicas(46198062, [
+    edad(27),
+    altura(186),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(castano_claro),
+    carrera(ingenieria),
+    signo(libra),
+    deporte(basketball),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(46198062, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 22, 28),
+    pref_rango(altura, 160, 175),
+    pref(departamento, montevideo),
+    pref(carrera, ingenieria),
+    pref(deporte, basketball)
+]).
+
+% --- 46240217 - Micaela ---
+perfil_nombre(46240217, micaela).
+perfil_caracteristicas(46240217, [
+    edad(24),
+    altura(162),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(si),
+    toma(si),
+    ojos(verde),
+    pelo(morocho),
+    carrera(derecho),
+    signo(leo),
+    deporte(hockey),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(46240217, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, [virgo]),
+    pref_rango(edad, 22, 29),
+    pref(departamento, montevideo),
+    pref(deporte, hockey),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 46461566 - Ezequiel ---
+perfil_nombre(46461566, ezequiel).
+perfil_caracteristicas(46461566, [
+    edad(25),
+    altura(180),
+    departamento(paysandu),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_oscuro),
+    carrera(humanidades),
+    signo(cancer),
+    deporte(futbol),
+    cita_ideal(cine)
+]).
+perfil_preferencia(46461566, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [aries, leo]),
+    pref_rango(edad, 22, 28),
+    pref(departamento, paysandu),
+    pref(carrera, humanidades),
+    pref(cita_ideal, cine)
+]).
+
+% --- 47068642 - Celeste ---
+perfil_nombre(47068642, celeste).
+perfil_caracteristicas(47068642, [
+    edad(23),
+    altura(166),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(castano_claro),
+    carrera(economia),
+    signo(piscis),
+    deporte(voleyball),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(47068642, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 22, 28),
+    pref(departamento, montevideo),
+    pref(cita_ideal, paseo_parque)
+]).
+
+% --- 47271426 - Leandro ---
+perfil_nombre(47271426, leandro).
+perfil_caracteristicas(47271426, [
+    edad(29),
+    altura(177),
+    departamento(colonia),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(verde),
+    pelo(castano_claro),
+    carrera(comunicacion),
+    signo(escorpio),
+    deporte(voleyball),
+    cita_ideal(shopping)
+]).
+perfil_preferencia(47271426, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 23, 30),
+    pref(carrera, comunicacion),
+    pref(cita_ideal, shopping)
+]).
+
+% --- 47489274 - Flor ---
+perfil_nombre(47489274, flor).
+perfil_caracteristicas(47489274, [
+    edad(21),
+    altura(161),
+    departamento(florida),
+    sexo(femenino),
+    fuma(no),
+    toma(no),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(humanidades),
+    signo(tauro),
+    deporte(handball),
+    cita_ideal(merienda)
+]).
+perfil_preferencia(47489274, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, [geminis]),
+    pref_rango(edad, 20, 26),
+    pref(departamento, florida),
+    pref(cita_ideal, merienda)
+]).
+
+% --- 47676659 - Augusto ---
+perfil_nombre(47676659, augusto).
+perfil_caracteristicas(47676659, [
+    edad(30),
+    altura(182),
+    departamento(rocha),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(derecho),
+    signo(sagitario),
+    deporte(rugby),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(47676659, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 24, 31),
+    pref(deporte, rugby),
+    pref(cita_ideal, aventura)
+]).
+
+% --- 47772425 - Amparo ---
+perfil_nombre(47772425, amparo).
+perfil_caracteristicas(47772425, [
+    edad(27),
+    altura(170),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(castano_oscuro),
+    carrera(ingenieria),
+    signo(virgo),
+    deporte(futbol),
+    cita_ideal(cena)
+]).
+perfil_preferencia(47772425, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [piscis]),
+    pref_rango(edad, 25, 32),
+    pref_rango(altura, 175, 190),
+    pref(departamento, montevideo),
+    pref(carrera, ingenieria),
+    pref(cita_ideal, cena)
+]).
+
+% --- 48472500 - Ivan ---
+perfil_nombre(48472500, ivan).
+perfil_caracteristicas(48472500, [
+    edad(24),
+    altura(175),
+    departamento(canelones),
+    sexo(masculino),
+    fuma(si),
+    toma(no),
+    ojos(marron_claro),
+    pelo(rubio),
+    carrera(economia),
+    signo(capricornio),
+    deporte(futbol),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(48472500, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, no),
+    pref(excluye_signo, [aries]),
+    pref_rango(edad, 21, 27),
+    pref(departamento, canelones)
+]).
+
+% --- 48640654 - Abril ---
+perfil_nombre(48640654, abril).
+perfil_caracteristicas(48640654, [
+    edad(22),
+    altura(163),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(pelirrojo),
+    carrera(comunicacion),
+    signo(libra),
+    deporte(hockey),
+    cita_ideal(cine)
+]).
+perfil_preferencia(48640654, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio, escorpio]),
+    pref_rango(edad, 21, 27),
+    pref(departamento, montevideo),
+    pref(cita_ideal, cine)
+]).
+
+% --- 48998282 - Hernan ---
+perfil_nombre(48998282, hernan).
+perfil_caracteristicas(48998282, [
+    edad(28),
+    altura(176),
+    departamento(tacuarembo),
+    sexo(masculino),
+    fuma(no),
+    toma(no),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(humanidades),
+    signo(acuario),
+    deporte(otro),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(48998282, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, []),
+    pref_rango(edad, 23, 30),
+    pref(cita_ideal, paseo_parque)
+]).
+
+% --- 49132346 - Natalia ---
+perfil_nombre(49132346, natalia).
+perfil_caracteristicas(49132346, [
+    edad(26),
+    altura(168),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(si),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_oscuro),
+    carrera(derecho),
+    signo(sagitario),
+    deporte(voleyball),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(49132346, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, [virgo]),
+    pref_rango(edad, 24, 32),
+    pref(departamento, montevideo),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 49428426 - Cristian ---
+perfil_nombre(49428426, cristian).
+perfil_caracteristicas(49428426, [
+    edad(23),
+    altura(181),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_claro),
+    carrera(ingenieria),
+    signo(leo),
+    deporte(rugby),
+    cita_ideal(cena)
+]).
+perfil_preferencia(49428426, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 20, 25),
+    pref_rango(altura, 160, 175),
+    pref(departamento, montevideo),
+    pref(carrera, ingenieria),
+    pref(cita_ideal, cena)
+]).
+
+% --- 49627833 - Paz ---
+perfil_nombre(49627833, paz).
+perfil_caracteristicas(49627833, [
+    edad(25),
+    altura(171),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(rubio),
+    carrera(humanidades),
+    signo(acuario),
+    deporte(handball),
+    cita_ideal(merienda)
+]).
+perfil_preferencia(49627833, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 23, 30),
+    pref(departamento, montevideo),
+    pref(cita_ideal, merienda)
+]).
+
+% --- 49676172 - Claudio ---
+perfil_nombre(49676172, claudio).
+perfil_caracteristicas(49676172, [
+    edad(32),
+    altura(178),
+    departamento(san_jose),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_claro),
+    carrera(comunicacion),
+    signo(geminis),
+    deporte(futbol),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(49676172, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 25, 33),
+    pref(departamento, san_jose)
+]).
+
+% --- 49695015 - Rocio ---
+perfil_nombre(49695015, rocio).
+perfil_caracteristicas(49695015, [
+    edad(24),
+    altura(165),
+    departamento(lavalleja),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(economia),
+    signo(tauro),
+    deporte(otro),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(49695015, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 22, 29)
+]).
+
+% --- 49703537 - Ramiro ---
+perfil_nombre(49703537, ramiro).
+perfil_caracteristicas(49703537, [
+    edad(26),
+    altura(184),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(rubio),
+    carrera(economia),
+    signo(aries),
+    deporte(voleyball),
+    cita_ideal(shopping)
+]).
+perfil_preferencia(49703537, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 22, 28),
+    pref(departamento, montevideo),
+    pref(cita_ideal, shopping)
+]).
+
+% --- 49841385 - Luana ---
+perfil_nombre(49841385, luana).
+perfil_caracteristicas(49841385, [
+    edad(21),
+    altura(167),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(no),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(derecho),
+    signo(virgo),
+    deporte(hockey),
+    cita_ideal(cine)
+]).
+perfil_preferencia(49841385, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, [aries]),
+    pref_rango(edad, 20, 25),
+    pref(departamento, montevideo),
+    pref(deporte, hockey)
+]).
+
+% --- 50035517 - Patricio ---
+perfil_nombre(50035517, patricio).
+perfil_caracteristicas(50035517, [
+    edad(27),
+    altura(179),
+    departamento(rivera),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(derecho),
+    signo(piscis),
+    deporte(futbol),
+    cita_ideal(cena)
+]).
+perfil_preferencia(50035517, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [leo]),
+    pref_rango(edad, 23, 30),
+    pref(departamento, rivera),
+    pref(carrera, derecho)
+]).
+
+% --- 50055752 - Candela ---
+perfil_nombre(50055752, candela).
+perfil_caracteristicas(50055752, [
+    edad(23),
+    altura(164),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(si),
+    toma(si),
+    ojos(marron_claro),
+    pelo(pelirrojo),
+    carrera(comunicacion),
+    signo(escorpio),
+    deporte(voleyball),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(50055752, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 21, 28),
+    pref(departamento, montevideo),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 50210238 - Esteban ---
+perfil_nombre(50210238, esteban).
+perfil_caracteristicas(50210238, [
+    edad(31),
+    altura(175),
+    departamento(soriano),
+    sexo(masculino),
+    fuma(no),
+    toma(no),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(humanidades),
+    signo(capricornio),
+    deporte(otro),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(50210238, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, []),
+    pref_rango(edad, 25, 33),
+    pref(carrera, humanidades)
+]).
+
+% --- 50524606 - Juli ---
+perfil_nombre(50524606, juli).
+perfil_caracteristicas(50524606, [
+    edad(22),
+    altura(169),
+    departamento(colonia),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(rubio),
+    carrera(economia),
+    signo(aries),
+    deporte(basketball),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(50524606, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [virgo, capricornio]),
+    pref_rango(edad, 21, 27),
+    pref(departamento, colonia),
+    pref(cita_ideal, aventura)
+]).
+
+% --- 50549440 - Nahuel ---
+perfil_nombre(50549440, nahuel).
+perfil_caracteristicas(50549440, [
+    edad(25),
+    altura(183),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(ingenieria),
+    signo(escorpio),
+    deporte(rugby),
+    cita_ideal(cena)
+]).
+perfil_preferencia(50549440, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 22, 28),
+    pref_rango(altura, 158, 173),
+    pref(departamento, montevideo),
+    pref(carrera, ingenieria),
+    pref(deporte, rugby)
+]).
+
+% --- 51065235 - Agus ---
+perfil_nombre(51065235, agus).
+perfil_caracteristicas(51065235, [
+    edad(24),
+    altura(166),
+    departamento(maldonado),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_claro),
+    carrera(ingenieria),
+    signo(geminis),
+    deporte(futbol),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(51065235, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [tauro]),
+    pref_rango(edad, 22, 29),
+    pref(cita_ideal, tomar_algo)
+]).
+
+% --- 51716998 - Damian ---
+perfil_nombre(51716998, damian).
+perfil_caracteristicas(51716998, [
+    edad(28),
+    altura(180),
+    departamento(artigas),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_oscuro),
+    carrera(economia),
+    signo(libra),
+    deporte(handball),
+    cita_ideal(cine)
+]).
+perfil_preferencia(51716998, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 23, 30),
+    pref(departamento, artigas)
+]).
+
+% --- 51805635 - Luci ---
+perfil_nombre(51805635, luci).
+perfil_caracteristicas(51805635, [
+    edad(20),
+    altura(160),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(no),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(humanidades),
+    signo(cancer),
+    deporte(otro),
+    cita_ideal(merienda)
+]).
+perfil_preferencia(51805635, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, []),
+    pref_rango(edad, 19, 24),
+    pref(departamento, montevideo)
+]).
+
+% --- 51982403 - Facundo ---
+perfil_nombre(51982403, facundo).
+perfil_caracteristicas(51982403, [
+    edad(24),
+    altura(177),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(rubio),
+    carrera(derecho),
+    signo(acuario),
+    deporte(hockey),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(51982403, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 21, 27),
+    pref(departamento, montevideo),
+    pref(deporte, hockey),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 52828309 - Melina ---
+perfil_nombre(52828309, melina).
+perfil_caracteristicas(52828309, [
+    edad(26),
+    altura(172),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(economia),
+    signo(sagitario),
+    deporte(voleyball),
+    cita_ideal(cena)
+]).
+perfil_preferencia(52828309, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 23, 30),
+    pref(departamento, montevideo),
+    pref(cita_ideal, cena)
+]).
+
+% --- 52860125 - Ariel ---
+perfil_nombre(52860125, ariel).
+perfil_caracteristicas(52860125, [
+    edad(27),
+    altura(173),
+    departamento(durazno),
+    sexo(masculino),
+    fuma(si),
+    toma(no),
+    ojos(azul),
+    pelo(castano_claro),
+    carrera(comunicacion),
+    signo(tauro),
+    deporte(futbol),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(52860125, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, no),
+    pref(excluye_signo, []),
+    pref_rango(edad, 22, 29),
+    pref(departamento, durazno)
+]).
+
+% --- 52967213 - Ivana ---
+perfil_nombre(52967213, ivana).
+perfil_caracteristicas(52967213, [
+    edad(25),
+    altura(170),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(si),
+    toma(si),
+    ojos(azul),
+    pelo(rubio),
+    carrera(ingenieria),
+    signo(libra),
+    deporte(basketball),
+    cita_ideal(shopping)
+]).
+perfil_preferencia(52967213, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 23, 30),
+    pref(departamento, montevideo),
+    pref(cita_ideal, shopping)
+]).
+
+% --- 53026274 - Marcos ---
+perfil_nombre(53026274, marcos).
+perfil_caracteristicas(53026274, [
+    edad(23),
+    altura(178),
+    departamento(canelones),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(economia),
+    signo(piscis),
+    deporte(futbol),
+    cita_ideal(cine)
+]).
+perfil_preferencia(53026274, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [virgo]),
+    pref_rango(edad, 20, 26),
+    pref(departamento, canelones),
+    pref(cita_ideal, cine)
+]).
+
+% --- 53616227 - Vale ---
+perfil_nombre(53616227, vale).
+perfil_caracteristicas(53616227, [
+    edad(28),
+    altura(173),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_claro),
+    carrera(derecho),
+    signo(cancer),
+    deporte(otro),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(53616227, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [aries, leo]),
+    pref_rango(edad, 25, 33),
+    pref(departamento, montevideo),
+    pref(cita_ideal, paseo_parque)
+]).
+
+% --- 53926355 - Emiliano ---
+perfil_nombre(53926355, emiliano).
+perfil_caracteristicas(53926355, [
+    edad(26),
+    altura(182),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(ingenieria),
+    signo(virgo),
+    deporte(rugby),
+    cita_ideal(cena)
+]).
+perfil_preferencia(53926355, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio, piscis]),
+    pref_rango(edad, 22, 28),
+    pref_rango(altura, 158, 172),
+    pref(departamento, montevideo),
+    pref(carrera, ingenieria)
+]).
+
+% --- 53993936 - Nadia ---
+perfil_nombre(53993936, nadia).
+perfil_caracteristicas(53993936, [
+    edad(22),
+    altura(164),
+    departamento(flores),
+    sexo(femenino),
+    fuma(no),
+    toma(no),
+    ojos(marron_claro),
+    pelo(castano_oscuro),
+    carrera(humanidades),
+    signo(geminis),
+    deporte(handball),
+    cita_ideal(merienda)
+]).
+perfil_preferencia(53993936, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, []),
+    pref_rango(edad, 20, 26)
+]).
+
+% --- 53996965 - Jonathan ---
+perfil_nombre(53996965, jonathan).
+perfil_caracteristicas(53996965, [
+    edad(29),
+    altura(176),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(comunicacion),
+    signo(aries),
+    deporte(basketball),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(53996965, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 24, 31),
+    pref(departamento, montevideo)
+]).
+
+% --- 54008243 - Guadalupe ---
+perfil_nombre(54008243, guadalupe).
+perfil_caracteristicas(54008243, [
+    edad(21),
+    altura(162),
+    departamento(paysandu),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(castano_claro),
+    carrera(ingenieria),
+    signo(capricornio),
+    deporte(futbol),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(54008243, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [aries]),
+    pref_rango(edad, 20, 26),
+    pref(departamento, paysandu),
+    pref(carrera, ingenieria)
+]).
+
+% --- 54039391 - Mauricio ---
+perfil_nombre(54039391, mauricio).
+perfil_caracteristicas(54039391, [
+    edad(32),
+    altura(181),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_claro),
+    carrera(economia),
+    signo(libra),
+    deporte(otro),
+    cita_ideal(cena)
+]).
+perfil_preferencia(54039391, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 26, 34),
+    pref(departamento, montevideo)
+]).
+
+% --- 54186205 - Tatiana ---
+perfil_nombre(54186205, tatiana).
+perfil_caracteristicas(54186205, [
+    edad(27),
+    altura(168),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(si),
+    toma(si),
+    ojos(verde),
+    pelo(otro),
+    carrera(economia),
+    signo(escorpio),
+    deporte(otro),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(54186205, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 25, 33),
+    pref(departamento, montevideo),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 54230692 - Cesar ---
+perfil_nombre(54230692, cesar).
+perfil_caracteristicas(54230692, [
+    edad(25),
+    altura(174),
+    departamento(treinta_y_tres),
+    sexo(masculino),
+    fuma(no),
+    toma(no),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(humanidades),
+    signo(tauro),
+    deporte(futbol),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(54230692, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, []),
+    pref_rango(edad, 21, 28)
+]).
+
+% --- 55483994 - Pili ---
+perfil_nombre(55483994, pili).
+perfil_caracteristicas(55483994, [
+    edad(23),
+    altura(166),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(castano_oscuro),
+    carrera(derecho),
+    signo(sagitario),
+    deporte(hockey),
+    cita_ideal(cena)
+]).
+perfil_preferencia(55483994, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [virgo]),
+    pref_rango(edad, 22, 28),
+    pref(departamento, montevideo),
+    pref(deporte, hockey)
+]).
+
+% --- 55897767 - Alejandro ---
+perfil_nombre(55897767, alejandro).
+perfil_caracteristicas(55897767, [
+    edad(30),
+    altura(180),
+    departamento(maldonado),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(comunicacion),
+    signo(sagitario),
+    deporte(voleyball),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(55897767, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 24, 32),
+    pref(departamento, maldonado),
+    pref(cita_ideal, aventura)
+]).
+
+% --- 56028338 - Noelia ---
+perfil_nombre(56028338, noelia).
+perfil_caracteristicas(56028338, [
+    edad(24),
+    altura(163),
+    departamento(canelones),
+    sexo(femenino),
+    fuma(si),
+    toma(no),
+    ojos(marron_claro),
+    pelo(morocho),
+    carrera(comunicacion),
+    signo(virgo),
+    deporte(otro),
+    cita_ideal(cine)
+]).
+perfil_preferencia(56028338, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, no),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 22, 29),
+    pref(departamento, canelones)
+]).
+
+% --- 56152871 - Gonza ---
+perfil_nombre(56152871, gonza).
+perfil_caracteristicas(56152871, [
+    edad(22),
+    altura(179),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_claro),
+    carrera(derecho),
+    signo(piscis),
+    deporte(futbol),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(56152871, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 20, 25),
+    pref(departamento, montevideo),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 56175411 - Ailin ---
+perfil_nombre(56175411, ailin).
+perfil_caracteristicas(56175411, [
+    edad(22),
+    altura(165),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(azul),
+    pelo(castano_claro),
+    carrera(economia),
+    signo(acuario),
+    deporte(basketball),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(56175411, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [tauro, escorpio]),
+    pref_rango(edad, 21, 27),
+    pref(departamento, montevideo),
+    pref(deporte, basketball)
+]).
+
+% --- 56318608 - Fede ---
+perfil_nombre(56318608, fede).
+perfil_caracteristicas(56318608, [
+    edad(26),
+    altura(176),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(no),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(ingenieria),
+    signo(capricornio),
+    deporte(rugby),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(56318608, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, [aries, leo]),
+    pref_rango(edad, 22, 29),
+    pref(departamento, montevideo),
+    pref(carrera, ingenieria)
+]).
+
+% --- 56402812 - Cami ---
+perfil_nombre(56402812, cami).
+perfil_caracteristicas(56402812, [
+    edad(20),
+    altura(161),
+    departamento(rio_negro),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(derecho),
+    signo(leo),
+    deporte(futbol),
+    cita_ideal(cine)
+]).
+perfil_preferencia(56402812, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [virgo]),
+    pref_rango(edad, 19, 25)
+]).
+
+% --- 56772227 - Nico ---
+perfil_nombre(56772227, nico).
+perfil_caracteristicas(56772227, [
+    edad(28),
+    altura(185),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(azul),
+    pelo(rubio),
+    carrera(economia),
+    signo(sagitario),
+    deporte(basketball),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(56772227, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 23, 30),
+    pref(cita_ideal, aventura)
+]).
+
+% --- 56830894 - Bianca ---
+perfil_nombre(56830894, bianca).
+perfil_caracteristicas(56830894, [
+    edad(25),
+    altura(169),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(otro),
+    carrera(humanidades),
+    signo(tauro),
+    deporte(handball),
+    cita_ideal(merienda)
+]).
+perfil_preferencia(56830894, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 23, 30),
+    pref(departamento, montevideo),
+    pref(cita_ideal, merienda)
+]).
+
+% --- 56968582 - Rodri ---
+perfil_nombre(56968582, rodri).
+perfil_caracteristicas(56968582, [
+    edad(21),
+    altura(177),
+    departamento(cerro_largo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_claro),
+    pelo(castano_oscuro),
+    carrera(comunicacion),
+    signo(geminis),
+    deporte(voleyball),
+    cita_ideal(cena)
+]).
+perfil_preferencia(56968582, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 19, 25),
+    pref(departamento, cerro_largo)
+]).
+
+% --- 56997128 - Aldana ---
+perfil_nombre(56997128, aldana).
+perfil_caracteristicas(56997128, [
+    edad(24),
+    altura(167),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(si),
+    toma(si),
+    ojos(marron_claro),
+    pelo(pelirrojo),
+    carrera(ingenieria),
+    signo(aries),
+    deporte(rugby),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(56997128, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, [capricornio]),
+    pref_rango(edad, 22, 30),
+    pref(departamento, montevideo),
+    pref(cita_ideal, aventura)
+]).
+
+% --- 58063020 - Matias ---
+perfil_nombre(58063020, matias).
+perfil_caracteristicas(58063020, [
+    edad(27),
+    altura(179),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(morocho),
+    carrera(derecho),
+    signo(virgo),
+    deporte(futbol),
+    cita_ideal(tomar_algo)
+]).
+perfil_preferencia(58063020, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [leo]),
+    pref_rango(edad, 23, 30),
+    pref_rango(altura, 158, 173),
+    pref(departamento, montevideo),
+    pref(carrera, derecho)
+]).
+
+% --- 58215993 - Sabrina ---
+perfil_nombre(58215993, sabrina).
+perfil_caracteristicas(58215993, [
+    edad(23),
+    altura(168),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(no),
+    ojos(azul),
+    pelo(rubio),
+    carrera(economia),
+    signo(cancer),
+    deporte(voleyball),
+    cita_ideal(paseo_parque)
+]).
+perfil_preferencia(58215993, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, no),
+    pref(excluye_signo, [aries, geminis]),
+    pref_rango(edad, 21, 27),
+    pref(departamento, montevideo)
+]).
+
+% --- 58251481 - Tomi ---
+perfil_nombre(58251481, tomi).
+perfil_caracteristicas(58251481, [
+    edad(22),
+    altura(183),
+    departamento(montevideo),
+    sexo(masculino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_claro),
+    carrera(ingenieria),
+    signo(leo),
+    deporte(futbol),
+    cita_ideal(cine)
+]).
+perfil_preferencia(58251481, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio, capricornio]),
+    pref_rango(edad, 20, 25),
+    pref_rango(altura, 158, 173),
+    pref(departamento, montevideo),
+    pref(deporte, futbol),
+    pref(cita_ideal, cine)
+]).
+
+% --- 58269762 - Mora ---
+perfil_nombre(58269762, mora).
+perfil_caracteristicas(58269762, [
+    edad(21),
+    altura(164),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(marron_oscuro),
+    pelo(castano_oscuro),
+    carrera(comunicacion),
+    signo(piscis),
+    deporte(hockey),
+    cita_ideal(shopping)
+]).
+perfil_preferencia(58269762, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [escorpio]),
+    pref_rango(edad, 20, 26),
+    pref(departamento, montevideo),
+    pref(cita_ideal, shopping)
+]).
+
+% --- 58628724 - Exequiel ---
+perfil_nombre(58628724, exequiel).
+perfil_caracteristicas(58628724, [
+    edad(26),
+    altura(178),
+    departamento(colonia),
+    sexo(masculino),
+    fuma(si),
+    toma(si),
+    ojos(verde),
+    pelo(morocho),
+    carrera(humanidades),
+    signo(geminis),
+    deporte(handball),
+    cita_ideal(fiesta)
+]).
+perfil_preferencia(58628724, [
+    pref(busca_sexo, femenino),
+    pref(busca_fuma, si),
+    pref(busca_toma, si),
+    pref(excluye_signo, []),
+    pref_rango(edad, 22, 30),
+    pref(cita_ideal, fiesta)
+]).
+
+% --- 59058395 - Anahi ---
+perfil_nombre(59058395, anahi).
+perfil_caracteristicas(59058395, [
+    edad(20),
+    altura(163),
+    departamento(montevideo),
+    sexo(femenino),
+    fuma(no),
+    toma(si),
+    ojos(verde),
+    pelo(castano_oscuro),
+    carrera(ingenieria),
+    signo(acuario),
+    deporte(futbol),
+    cita_ideal(aventura)
+]).
+perfil_preferencia(59058395, [
+    pref(busca_sexo, masculino),
+    pref(busca_fuma, no),
+    pref(busca_toma, si),
+    pref(excluye_signo, [tauro]),
+    pref_rango(edad, 19, 25),
+    pref(departamento, montevideo),
+    pref(deporte, futbol),
+    pref(cita_ideal, aventura)
+]).
