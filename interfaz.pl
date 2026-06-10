@@ -4,8 +4,10 @@
 :- use_module(library(pce)).
 
 :- dynamic signos_excluidos_temporal/2.
-:- dynamic preferencias/2.
-
+:- dynamic compatibles_temporal/2.
+:- dynamic likear_temporal/2.
+:- dynamic matches_temporal/2.
+:- dynamic descartado/2.
 
 %---------------------------------------------------------------------------------------------------------------------------------------------------------
 %INICIO
@@ -61,13 +63,25 @@ ventana_login:-
   send(BotonIngresar, colour, colour(@default, 49, 65, 122)), %Especifica color
   send(Ventana, append, BotonIngresar), %Lo pone en la ventana
 
+  new(BotonCerrar, button('Cerrar', message(Ventana, destroy))),
+  send(BotonCerrar, font, font(verdana, bold, 14)),
+  send(BotonCerrar, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, BotonCerrar),
+
   %Abrir la ventana
   send(Ventana, open).
 
 %
 
 %Volver al login desde otra ventana
-volver_login(Ventana) :-
+volver_desde_preferencias(Ventana, CI, registro) :-
+  borrar_perfil_incompleto(CI),
+  send(Ventana, destroy),
+  ventana_login.
+
+%
+
+volver_login(Ventana):-
   send(Ventana, destroy),
   ventana_login.
 %
@@ -381,7 +395,7 @@ procesar_registro(Ventana, CI, CampoNombre, CampoEdad, MenuSexo, MenuEstadoCivil
 
   %2. sacamos los datos de los menus
   get(MenuSexo, selection, Sexo),
-  get(MenuEstadoCivil, selection, EstadoCivil)
+  get(MenuEstadoCivil, selection, EstadoCivil),
   get(MenuDepartamento, selection, Departamento),
   get(MenuOjos, selection, Ojos),
   get(MenuPelo, selection, Pelo),
@@ -393,27 +407,27 @@ procesar_registro(Ventana, CI, CampoNombre, CampoEdad, MenuSexo, MenuEstadoCivil
   get(MenuToma, selection, Toma),
 
   %3 Creamos la lista con las caracteristicas
-  ListaAtributos = [sexo(Sexo), fuma(Fuma), toma(Toma), signo(Signo), estado_Civil(EstadoCivil) edad(Edad), altura(Altura), departamento(Departamento), ojos(Ojos), pelo(Pelo), carrera(Carrera), deporte(Deporte), cita_ideal(CitaIdeal)],
+  ListaAtributos = [sexo(Sexo), fuma(Fuma), toma(Toma), signo(Signo), estado_civil(EstadoCivil), edad(Edad), altura(Altura), departamento(Departamento), ojos(Ojos), pelo(Pelo), carrera(Carrera), deporte(Deporte), cita_ideal(CitaIdeal)],
 
   %4. Creamos y guardamos el perfil
   crear_perfil(CI, Nombre, ListaAtributos),
  
   %5 Nos vamos al Menu principal
   send(Ventana, destroy),
-  ventana_definir_preferencias(CI).
+  ventana_definir_preferencias(CI, registro).
 %
 
 
 %-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 %Definicion Inicial de Preferencias
 %----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-ventana_definir_preferencias(CI):-
+ventana_definir_preferencias(CI, Origen):-
   
   new(Ventana, dialog('UM Match - Preferencias')),
   send(Ventana, size, size(850, 900)),
 
   %Nos fijamos si este usuario ya tiene preferencias o si es un nuevo usuario
-  (preferencias(CI, ListaPreferencias)->
+  (perfil_preferencia(CI, ListaPreferencias)->
     true;
     ListaPreferencias = []),
 
@@ -561,7 +575,7 @@ ventana_definir_preferencias(CI):-
   send(Ventana, display, LabelCitaIdeal, point(450, 400)),
 
   crear_menu_opciones(cita_ideal, MenuCitaIdeal),
-  cargar_valor_menu(MenuCitaIdeal, cita_ideal, ListaPreferencias)
+  cargar_valor_menu(MenuCitaIdeal, cita_ideal, ListaPreferencias),
   send(Ventana, display, MenuCitaIdeal, point(450, 425)),
 
   % Fuma
@@ -603,7 +617,7 @@ ventana_definir_preferencias(CI):-
   send(Ventana, display, BotonGuardar, point(350, 800)),
 
   % Boton volver
-  new(BotonVolver, button('Volver', message(@prolog, volver_login, Ventana))),
+  new(BotonVolver, button('Volver', message(@prolog, volver_desde_preferencias, Ventana, CI, Origen))),
   send(BotonVolver, font, font(verdana, bold, 18)),
   send(BotonVolver, colour, colour(@default, 49, 65, 122)),
   send(Ventana, display, BotonVolver, point(230, 800)),
@@ -854,10 +868,9 @@ procesar_preferencias(Ventana, CI, CampoEdadMin, CampoEdadMax, MenuSexo, MenuEst
   (signos_excluidos_temporal(CI, ListaSignosExcluidos)->true;
     ListaSignosExcluidos = []),
 
-  ListaPreferencias = [ sexo(Sexo), fuma(Fuma), toma(Toma), signos_excluidos(ListaSignosExcluidos), edad_min(EdadMin), edad_max(EdadMax), estado_civil(EstadoCivil), altura_min(AlturaMin), altura_max(AlturaMax), departamento(Departamento), ojos(Ojos), pelo(Pelo), carrera(Carrera), signo(Signo), deporte(Deporte), cita_ideal(CitaIdeal)],
+  ListaPreferencias = [ pref(busca_sexo, Sexo), pref(busca_fuma, Fuma), pref(busca_toma, Toma), pref(busca_estado_civil, EstadoCivil), pref(excluye_signo, ListaSignosExcluidos), pref_rango(edad, EdadMin, EdadMax), pref_rango(altura, AlturaMin, AlturaMax), pref(departamento, Departamento), pref(ojos, Ojos), pref(pelo, Pelo), pref(carrera, Carrera), pref(signo, Signo), pref(deporte, Deporte), pref(cita_ideal, CitaIdeal)],
 
-  retractall(preferencias(CI, _)),
-  assertz(preferencias(CI, ListaPreferencias)),
+  actualizar_preferencias(CI, ListaPreferencias),
 
   %Borramos los signos para q quede vacia la lista para el proximo usuario
   retractall(signos_excluidos_temporal(CI, _)),
@@ -892,58 +905,777 @@ ventana_menu(CI) :-
   send(TextoCI, colour, colour(@default, 60, 60, 60)),
   send(Ventana, display, TextoCI, point(150, 110)),
 
- % Boton buscar perfiles
-  new(BotonBuscar, button('Buscar perfiles', message(@prolog, abrir_likear, Ventana, CI))),
-  send(BotonBuscar, font, font(verdana, bold, 18)),
-  send(BotonBuscar, colour, colour(@default, 49, 65, 122)),
-  send(Ventana, display, BotonBuscar, point(30, 210)),
+  %Nombre del Usuario
+  perfil_nombre(CI, Nombre),
+
+  new(LabelNombre, label(label_nombre, 'Nombre')),
+  send(LabelNombre, font, font(verdana, bold, 16)),
+  send(LabelNombre, colour, colour(@default, 143, 179, 226)),
+  send(Ventana, display, LabelNombre, point(30, 145)),
+
+  new(TextoNombre, label(texto_nombre, Nombre)),
+  send(TextoNombre, font, font(verdana, roman, 16)),
+  send(TextoNombre, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, TextoNombre, point(150, 145)),
+
+  % Boton ver compatibles
+  new(BotonCompatibles, button('Ver compatibles', message(@prolog, abrir_compatibles, Ventana, CI))),
+  send(BotonCompatibles, font, font(verdana, bold, 18)),
+  send(BotonCompatibles, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonCompatibles, point(30, 210)),
+
+  % Boton likear perfiles
+  new(BotonLikear, button('Likear perfiles', message(@prolog, abrir_likear, Ventana, CI))),
+  send(BotonLikear, font, font(verdana, bold, 18)),
+  send(BotonLikear, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonLikear, point(30, 285)),
 
   % Boton ver matches
   new(BotonMatches, button('Ver matches', message(@prolog, abrir_matches, Ventana, CI))),
   send(BotonMatches, font, font(verdana, bold, 18)),
   send(BotonMatches, colour, colour(@default, 49, 65, 122)),
-  send(Ventana, display, BotonMatches, point(30, 300)),
+  send(Ventana, display, BotonMatches, point(30, 360)),
+
+  % Boton algoritmo genetico
+  new(BotonGenetico, button('Algoritmo Genetico', message(@prolog, abrir_algoritmo_genetico, Ventana, CI))),
+  send(BotonGenetico, font, font(verdana, bold, 18)),
+  send(BotonGenetico, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonGenetico, point(30, 435)),
 
   % Boton redefinir preferencias
   new(BotonPreferencias, button('Redefinir preferencias', message(@prolog, abrir_preferencias, Ventana, CI))),
   send(BotonPreferencias, font, font(verdana, bold, 18)),
   send(BotonPreferencias, colour, colour(@default, 49, 65, 122)),
-  send(Ventana, display, BotonPreferencias, point(30, 390)),
+  send(Ventana, display, BotonPreferencias, point(30, 510)),
 
-  % Boton volver al login
+  % Boton volver
   new(BotonVolver, button('Volver al login', message(@prolog, volver_login, Ventana))),
   send(BotonVolver, font, font(verdana, bold, 18)),
   send(BotonVolver, colour, colour(@default, 49, 65, 122)),
-  send(Ventana, display, BotonVolver, point(30, 520)),
+  send(Ventana, display, BotonVolver, point(30, 605)),
+
+
+
+  send(Ventana, open).
+%
+
+%Para volver al menu principal desde redefinir preferencias
+volver_desde_preferencias(Ventana, CI, menu) :-
+  send(Ventana, destroy),
+  ventana_menu(CI).
+%
+
+%Para volver al menu del resto de las ventanas
+volver_menu(Ventana, CI) :-
+  send(Ventana, destroy),
+  ventana_menu(CI).
+%
+
+%Funcion auxiliar para borrar el usuario que estaba creando
+borrar_perfil_incompleto(CI) :-
+  retractall(perfil_nombre(CI, _)),
+  retractall(perfil_caracteristicas(CI, _)),
+  retractall(perfil_preferencia(CI, _)),
+  retractall(signos_excluidos_temporal(CI, _)).
+%
+
+
+%-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+%Ver compatibles
+%------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+abrir_compatibles(Ventana, CI) :-
+  send(Ventana, destroy),
+  ventana_compatibles(CI).
+%
+
+ventana_compatibles(CI) :-
+  compatibles_mutuos_de(CI, Compatibles),
+  retractall(compatibles_temporal(CI, _)),
+  assertz(compatibles_temporal(CI, Compatibles)),
+  mostrar_compatible_por_posicion(CI, 1).
+%
+
+mostrar_compatible_por_posicion(CI, _) :-
+  compatibles_temporal(CI, []),
+  ventana_no_mas_compatibles(CI),
+  !.
+
+mostrar_compatible_por_posicion(CI, Posicion) :-
+  compatibles_temporal(CI, Compatibles),
+  nth1(Posicion, Compatibles, CICompatible),
+  perfil_nombre(CICompatible, Nombre),
+  perfil_caracteristicas(CICompatible, Caracteristicas),
+  estado_perfil(CI, CICompatible, Estado),
+  ventana_perfil_compatible(CI, Posicion, CICompatible, Nombre, Caracteristicas, Estado).
+%
+
+ventana_perfil_compatible(CI, Posicion, CICompatible, Nombre, Caracteristicas, Estado) :-
+  compatibles_temporal(CI, Compatibles),
+  length(Compatibles, Total),
+
+  new(Ventana, dialog('UM Match - Compatibles')),
+  send(Ventana, size, size(800, 850)),
+
+  new(Titulo, label(titulo, 'Perfil compatible')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  % Nombre
+  mostrar_texto(Ventana, 'Nombre', Nombre, 80, 90),
+
+  % Cedula
+  mostrar_texto(Ventana, 'Cedula', CICompatible, 450, 90),
+
+  % Caracteristicas en dos columnas
+  mostrar_caracteristica(Ventana, Caracteristicas, sexo, 'Sexo', 80, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, estado_civil, 'Estado civil', 80, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, edad, 'Edad', 80, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, altura, 'Altura', 80, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, departamento, 'Departamento', 80, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, ojos, 'Ojos', 80, 545),
+
+  mostrar_caracteristica(Ventana, Caracteristicas, pelo, 'Pelo', 450, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, carrera, 'Carrera', 450, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, signo, 'Signo', 450, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, deporte, 'Deporte', 450, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, cita_ideal, 'Cita ideal', 450, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, fuma, 'Fuma', 450, 545),
+  mostrar_caracteristica(Ventana, Caracteristicas, toma, 'Toma', 450, 620),
+
+  % Coincidencias con mis preferencias
+  mostrar_coincidencias(Ventana, CI, CICompatible, 80, 660),
+
+  % Estado
+  new(LabelEstado, label(label_estado, 'Estado')),
+  send(LabelEstado, font, font(verdana, bold, 16)),
+  send(LabelEstado, colour, colour(@default, 143, 179, 226)),
+  send(Ventana, display, LabelEstado, point(80, 720)),
+
+  new(TextoEstado, label(texto_estado, Estado)),
+  send(TextoEstado, font, font(verdana, roman, 16)),
+  send(TextoEstado, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, TextoEstado, point(180, 720)),
+
+  % Numero de perfil actual
+  atomic_list_concat([Posicion, '/', Total], TextoPosicion),
+
+  new(LabelPosicion, label(label_posicion, TextoPosicion)),
+  send(LabelPosicion, font, font(verdana, bold, 16)),
+  send(LabelPosicion, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, LabelPosicion, point(700, 720)),
+
+  % Boton anterior
+  new(BotonAnterior, button('Anterior', message(@prolog, compatible_anterior, Ventana, CI, Posicion))),
+  send(BotonAnterior, font, font(verdana, bold, 18)),
+  send(BotonAnterior, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonAnterior, point(100, 780)),
+
+  % Boton siguiente
+  new(BotonSiguiente, button('Siguiente', message(@prolog, compatible_siguiente, Ventana, CI, Posicion))),
+  send(BotonSiguiente, font, font(verdana, bold, 18)),
+  send(BotonSiguiente, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonSiguiente, point(330, 780)),
+
+  % Boton salir
+  new(BotonSalir, button('Salir', message(@prolog, salir_compatibles, Ventana, CI))),
+  send(BotonSalir, font, font(verdana, bold, 18)),
+  send(BotonSalir, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonSalir, point(570, 780)),
+
+  send(Ventana, open).
+%
+
+estado_perfil(CI, CICompatible, 'Likeado') :-
+  like(CI, CICompatible),
+  !.
+
+estado_perfil(CI, CICompatible, 'Descartado') :-
+  descartado(CI, CICompatible),
+  !.
+
+estado_perfil(_, _, 'Por likear').
+
+
+compatible_siguiente(Ventana, CI, Posicion) :-
+  send(Ventana, destroy),
+  compatibles_temporal(CI, Compatibles),
+  length(Compatibles, Total),
+  (Posicion>=Total-> 
+    NuevaPosicion = 1;
+    NuevaPosicion is Posicion+1),
+  mostrar_compatible_por_posicion(CI, NuevaPosicion).
+
+
+%
+
+compatible_anterior(Ventana, CI, Posicion) :-
+  send(Ventana, destroy),
+  compatibles_temporal(CI, Compatibles),
+  length(Compatibles, Total),
+  
+  (Posicion =< 1 ->
+      NuevaPosicion = Total;
+      NuevaPosicion is Posicion - 1
+  ),
+  mostrar_compatible_por_posicion(CI, NuevaPosicion).
+%
+
+salir_compatibles(Ventana, CI) :-
+  retractall(compatibles_temporal(CI, _)),
+  send(Ventana, destroy),
+  ventana_menu(CI).
+%
+
+ventana_no_mas_compatibles(CI) :-
+  new(Ventana, dialog('UM Match - Compatibles')),
+  send(Ventana, size, size(700, 500)),
+
+  new(Titulo, label(titulo, 'Compatibles')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  new(Mensaje, label(mensaje, 'No hay perfiles compatibles para mostrar.')),
+  send(Mensaje, font, font(verdana, roman, 16)),
+  send(Mensaje, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, Mensaje, point(110, 180)),
+
+  new(BotonVolver, button('Volver al menu', message(@prolog, salir_compatibles, Ventana, CI))),
+  send(BotonVolver, font, font(verdana, bold, 18)),
+  send(BotonVolver, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonVolver, point(250, 320)),
+
+  send(Ventana, open).
+%
+
+% Muestra un dato simple como texto: titulo + valor.
+mostrar_texto(Ventana, TextoLabel, Valor, X, Y) :-
+  new(Label, label(label_texto, TextoLabel)),
+  send(Label, font, font(verdana, bold, 15)),
+  send(Label, colour, colour(@default, 143, 179, 226)),
+  send(Ventana, display, Label, point(X, Y)),
+
+  YValor is Y + 25,
+
+  new(Texto, label(valor_texto, Valor)),
+  send(Texto, font, font(verdana, roman, 15)),
+  send(Texto, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, Texto, point(X, YValor)).
+%
+
+% Muestra una caracteristica si existe.
+mostrar_caracteristica(Ventana, Caracteristicas, Atributo, TextoLabel, X, Y) :-
+  Termino =.. [Atributo, Valor],
+  member(Termino, Caracteristicas),
+  !,
+  mostrar_texto(Ventana, TextoLabel, Valor, X, Y).
+%
+
+% Si la caracteristica no existe, no muestra nada y no rompe.
+mostrar_caracteristica(_, _, _, _, _, _).
+%
+
+% Muestra las coincidencias con las preferencias del usuario.
+mostrar_coincidencias(Ventana, CI, CICompatible, X, Y) :-
+  por_que_compatible(CI, CICompatible, Coincidencias),
+  texto_coincidencias(Coincidencias, TextoCoincidencias),
+
+  new(LabelCoincidencias, label(label_coincidencias, 'Coincidencias')),
+  send(LabelCoincidencias, font, font(verdana, bold, 16)),
+  send(LabelCoincidencias, colour, colour(@default, 143, 179, 226)),
+  send(Ventana, display, LabelCoincidencias, point(X, Y)),
+
+  YTexto is Y + 25,
+
+  new(Texto, label(texto_coincidencias, TextoCoincidencias)),
+  send(Texto, font, font(verdana, roman, 13)),
+  send(Texto, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, Texto, point(X, YTexto)).
+%
+
+texto_coincidencias([], 'Ninguna').
+
+texto_coincidencias(Coincidencias, Texto) :-
+  Coincidencias \= [],
+  atomic_list_concat(Coincidencias, ', ', Texto).
+%
+
+%----------------------------------------------------------------------------------------------------------------------------------------------------
+%Likear perfiles
+%----------------------------------------------------------------------------------------------------------------------------------------------------
+% Abre la ventana de likear desde el menu principal.
+abrir_likear(VentanaMenu, CI) :-
+  send(VentanaMenu, destroy),
+  iniciar_likear(CI).
+%
+
+% Calcula la lista de perfiles compatibles mutuos que todavia no fueron vistos.
+iniciar_likear(CI) :-
+  compatibles_mutuos_de(CI, Compatibles),
+  filtrar_perfiles_pendientes(CI, Compatibles, Pendientes),
+  retractall(likear_temporal(CI, _)),
+  assertz(likear_temporal(CI, Pendientes)),
+  mostrar_likear_por_posicion(CI, 1).
+%
+
+% Si no hay perfiles pendientes
+mostrar_likear_por_posicion(CI, _) :-
+  likear_temporal(CI, []),
+  ventana_sin_mas_perfiles(CI),
+  !.
+%
+
+% Si la posicion se pasa del total, vuelve al primero
+mostrar_likear_por_posicion(CI, Posicion) :-
+  likear_temporal(CI, Pendientes),
+  length(Pendientes, Total),
+  Total > 0,
+  (
+    Posicion > Total ->
+      PosicionFinal = 1
+    ;
+      PosicionFinal = Posicion
+  ),
+  nth1(PosicionFinal, Pendientes, CICompatible),
+  perfil_nombre(CICompatible, Nombre),
+  perfil_caracteristicas(CICompatible, Caracteristicas),
+  ventana_perfil_likear(CI, PosicionFinal, CICompatible, Nombre, Caracteristicas).
+%
+
+% Ventana que muestra un perfil compatible para likear.
+ventana_perfil_likear(CI, Posicion, CICompatible, Nombre, Caracteristicas) :-
+  likear_temporal(CI, Pendientes),
+  length(Pendientes, Total),
+
+  new(Ventana, dialog('UM Match - Likear perfiles')),
+  send(Ventana, size, size(800, 900)),
+
+  new(Titulo, label(titulo, 'Perfil compatible')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  % Nombre
+  mostrar_texto(Ventana, 'Nombre', Nombre, 80, 90),
+
+  % Cedula
+  mostrar_texto(Ventana, 'Cedula', CICompatible, 450, 90),
+
+  % Caracteristicas en dos columnas
+  mostrar_caracteristica(Ventana, Caracteristicas, sexo, 'Sexo', 80, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, estado_civil, 'Estado civil', 80, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, edad, 'Edad', 80, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, altura, 'Altura', 80, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, departamento, 'Departamento', 80, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, ojos, 'Ojos', 80, 545),
+
+  mostrar_caracteristica(Ventana, Caracteristicas, pelo, 'Pelo', 450, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, carrera, 'Carrera', 450, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, signo, 'Signo', 450, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, deporte, 'Deporte', 450, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, cita_ideal, 'Cita ideal', 450, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, fuma, 'Fuma', 450, 545),
+  mostrar_caracteristica(Ventana, Caracteristicas, toma, 'Toma', 450, 620),
+
+  % Coincidencias con mis preferencias
+  mostrar_coincidencias(Ventana, CI, CICompatible, 80, 685),
+
+  % Numero de perfil actual, ejemplo 1/5
+  atomic_list_concat([Posicion, '/', Total], TextoPosicion),
+
+  new(LabelPosicion, label(label_posicion, TextoPosicion)),
+  send(LabelPosicion, font, font(verdana, bold, 16)),
+  send(LabelPosicion, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, LabelPosicion, point(700, 730)),
+
+  % Boton Volver
+  new(BotonVolver, button('Volver', message(@prolog, salir_likear, Ventana, CI))),
+  send(BotonVolver, font, font(verdana, bold, 18)),
+  send(BotonVolver, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonVolver, point(120, 800)),
+
+  % Boton Likear
+  new(BotonLikear, button('Likear', message(@prolog, accion_likear, Ventana, CI, Posicion))),
+  send(BotonLikear, font, font(verdana, bold, 18)),
+  send(BotonLikear, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonLikear, point(330, 800)),
+
+  % Boton Pasar
+  new(BotonSiguiente, button('Pasar', message(@prolog, accion_siguiente, Ventana, CI, Posicion))),
+  send(BotonSiguiente, font, font(verdana, bold, 18)),
+  send(BotonSiguiente, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonSiguiente, point(530, 800)),
+
+  send(Ventana, open).
+%
+
+% Boton Likear: guarda el like, saca el perfil de la lista temporal y muestra el siguiente.
+accion_likear(Ventana, CI, Posicion) :-
+  likear_temporal(CI, Pendientes),
+  nth1(Posicion, Pendientes, CICompatible),
+
+  dar_like(CI, CICompatible),
+
+  sacar_de_lista(CICompatible, Pendientes, NuevosPendientes),
+  retractall(likear_temporal(CI, _)),
+  assertz(likear_temporal(CI, NuevosPendientes)),
+
+  send(Ventana, destroy),
+  mostrar_likear_por_posicion(CI, Posicion).
+%
+
+% Boton Pasar: descarta el perfil, lo saca de la lista temporal y muestra el siguiente.
+accion_siguiente(Ventana, CI, Posicion) :-
+  likear_temporal(CI, Pendientes),
+  nth1(Posicion, Pendientes, CICompatible),
+
+  assertz(descartado(CI, CICompatible)),
+
+  sacar_de_lista(CICompatible, Pendientes, NuevosPendientes),
+  retractall(likear_temporal(CI, _)),
+  assertz(likear_temporal(CI, NuevosPendientes)),
+
+  send(Ventana, destroy),
+  mostrar_likear_por_posicion(CI, Posicion).
+%
+
+% Saca un elemento de una lista
+sacar_de_lista(_, [], []).
+
+sacar_de_lista(Elemento, [Elemento | Resto], Resto) :-
+  !.
+
+sacar_de_lista(Elemento, [Cabeza | Resto], [Cabeza | Resultado]) :-
+  sacar_de_lista(Elemento, Resto, Resultado).
+%
+
+% Salir desde likear perfiles
+salir_likear(Ventana, CI) :-
+  retractall(likear_temporal(CI, _)),
+  send(Ventana, destroy),
+  ventana_menu(CI).
+%
+
+% Ventana final cuando no quedan mas perfiles.
+ventana_sin_mas_perfiles(CI) :-
+  retractall(likear_temporal(CI, _)),
+
+  new(Ventana, dialog('UM Match - Likear perfiles')),
+  send(Ventana, size, size(700, 500)),
+
+  new(Titulo, label(titulo, 'Likear perfiles')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  new(Mensaje, label(mensaje, 'No hay mas perfiles compatibles para mostrar.')),
+  send(Mensaje, font, font(verdana, roman, 16)),
+  send(Mensaje, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, Mensaje, point(80, 180)),
+
+  new(BotonVolver, button('Volver', message(@prolog, volver_menu, Ventana, CI))),
+  send(BotonVolver, font, font(verdana, bold, 18)),
+  send(BotonVolver, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonVolver, point(80, 330)),
+
+  send(Ventana, open).
+%
+
+% Filtra perfiles que ya fueron likeados o descartados.
+filtrar_perfiles_pendientes(_, [], []).
+
+filtrar_perfiles_pendientes(CI, [Otro | Resto], Resultado) :-
+  like(CI, Otro),
+  !,
+  filtrar_perfiles_pendientes(CI, Resto, Resultado).
+
+filtrar_perfiles_pendientes(CI, [Otro | Resto], Resultado) :-
+  descartado(CI, Otro),
+  !,
+  filtrar_perfiles_pendientes(CI, Resto, Resultado).
+
+filtrar_perfiles_pendientes(CI, [Otro | Resto], [Otro | Resultado]) :-
+  filtrar_perfiles_pendientes(CI, Resto, Resultado).
+%
+
+%----------------------------------------------------------------------------------------------------------------------------------------------------
+%Ver Matches
+%----------------------------------------------------------------------------------------------------------------------------------------------------
+
+abrir_matches(Ventana, CI) :-
+  ventana_matches(CI),
+  send(Ventana, destroy).
+%
+
+ventana_matches(CI) :-
+  matches_de(CI, Matches),
+  (
+    Matches = [] ->
+      ventana_no_mas_matches(CI)
+    ;
+      retractall(matches_temporal(CI, _)),
+      assertz(matches_temporal(CI, Matches)),
+      mostrar_match_por_posicion(CI, 1)
+  ).
+%
+
+mostrar_match_por_posicion(CI, _) :-
+  matches_temporal(CI, []),
+  ventana_no_mas_matches(CI),
+  !.
+
+mostrar_match_por_posicion(CI, Posicion) :-
+  matches_temporal(CI, Matches),
+  nth1(Posicion, Matches, CIMatch),
+  perfil_nombre(CIMatch, Nombre),
+  perfil_caracteristicas(CIMatch, Caracteristicas),
+  ventana_perfil_match(CI, Posicion, CIMatch, Nombre, Caracteristicas).
+%
+
+ventana_perfil_match(CI, Posicion, CIMatch, Nombre, Caracteristicas) :-
+  matches_temporal(CI, Matches),
+  length(Matches, Total),
+
+  new(Ventana, dialog('UM Match - Matches')),
+  send(Ventana, size, size(800, 850)),
+
+  new(Titulo, label(titulo, 'Perfil de match')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  % Nombre
+  mostrar_texto(Ventana, 'Nombre', Nombre, 80, 90),
+
+  % Cedula
+  mostrar_texto(Ventana, 'Cedula', CIMatch, 450, 90),
+
+  % Caracteristicas en dos columnas
+  mostrar_caracteristica(Ventana, Caracteristicas, sexo, 'Sexo', 80, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, estado_civil, 'Estado civil', 80, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, edad, 'Edad', 80, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, altura, 'Altura', 80, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, departamento, 'Departamento', 80, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, ojos, 'Ojos', 80, 545),
+
+  mostrar_caracteristica(Ventana, Caracteristicas, pelo, 'Pelo', 450, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, carrera, 'Carrera', 450, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, signo, 'Signo', 450, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, deporte, 'Deporte', 450, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, cita_ideal, 'Cita ideal', 450, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, fuma, 'Fuma', 450, 545),
+  mostrar_caracteristica(Ventana, Caracteristicas, toma, 'Toma', 450, 620),
+
+  % Estado
+  new(LabelEstado, label(label_estado, 'Estado')),
+  send(LabelEstado, font, font(verdana, bold, 16)),
+  send(LabelEstado, colour, colour(@default, 143, 179, 226)),
+  send(Ventana, display, LabelEstado, point(80, 685)),
+
+  new(TextoEstado, label(texto_estado, 'Match')),
+  send(TextoEstado, font, font(verdana, roman, 16)),
+  send(TextoEstado, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, TextoEstado, point(180, 685)),
+
+  % Numero de match actual
+  atomic_list_concat([Posicion, '/', Total], TextoPosicion),
+
+  new(LabelPosicion, label(label_posicion, TextoPosicion)),
+  send(LabelPosicion, font, font(verdana, bold, 16)),
+  send(LabelPosicion, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, LabelPosicion, point(700, 685)),
+
+  % Boton anterior
+  new(BotonAnterior, button('Anterior', message(@prolog, match_anterior, Ventana, CI, Posicion))),
+  send(BotonAnterior, font, font(verdana, bold, 18)),
+  send(BotonAnterior, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonAnterior, point(100, 750)),
+
+  % Boton siguiente
+  new(BotonSiguiente, button('Siguiente', message(@prolog, match_siguiente, Ventana, CI, Posicion))),
+  send(BotonSiguiente, font, font(verdana, bold, 18)),
+  send(BotonSiguiente, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonSiguiente, point(330, 750)),
+
+  % Boton salir
+  new(BotonSalir, button('Salir', message(@prolog, salir_matches, Ventana, CI))),
+  send(BotonSalir, font, font(verdana, bold, 18)),
+  send(BotonSalir, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonSalir, point(570, 750)),
+
+  send(Ventana, open).
+%
+
+% Boton siguiente con ciclo
+match_siguiente(Ventana, CI, Posicion) :-
+  send(Ventana, destroy),
+  matches_temporal(CI, Matches),
+  length(Matches, Total),
+  (
+    Posicion >= Total ->
+      NuevaPosicion = 1
+    ;
+      NuevaPosicion is Posicion + 1
+  ),
+  mostrar_match_por_posicion(CI, NuevaPosicion).
+%
+
+% Boton anterior con ciclo
+match_anterior(Ventana, CI, Posicion) :-
+  send(Ventana, destroy),
+  matches_temporal(CI, Matches),
+  length(Matches, Total),
+  (
+    Posicion =< 1 ->
+      NuevaPosicion = Total
+    ;
+      NuevaPosicion is Posicion - 1
+  ),
+  mostrar_match_por_posicion(CI, NuevaPosicion).
+%
+
+
+salir_matches(Ventana, CI) :-
+  retractall(matches_temporal(CI, _)),
+  send(Ventana, destroy),
+  ventana_menu(CI).
+%
+
+ventana_no_mas_matches(CI) :-
+  new(Ventana, dialog('UM Match - Matches')),
+  send(Ventana, size, size(700, 500)),
+
+  new(Titulo, label(titulo, 'Matches')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  new(Mensaje, label(mensaje, 'No hay matches para mostrar.')),
+  send(Mensaje, font, font(verdana, roman, 16)),
+  send(Mensaje, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, Mensaje, point(180, 180)),
+
+  new(BotonVolver, button('Volver al menu', message(@prolog, salir_matches, Ventana, CI))),
+  send(BotonVolver, font, font(verdana, bold, 18)),
+  send(BotonVolver, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonVolver, point(250, 320)),
 
   send(Ventana, open).
 %
 
 
-%----------------------------------------------------------------------------------------------------------------------------------------------------
-%Likear perfiles
-%----------------------------------------------------------------------------------------------------------------------------------------------------
-abrir_likear(Ventana, CI):-
-  send(Ventana, destroy),
-  ventana_likear(CI).
+%------------------------------------------------------------------------------------------------------------------------------------------------------
+%Algoritmo Genetico
+%----------------------------------------------------------------------------------------------------------------------------------------------------------
+abrir_algoritmo_genetico(Ventana, CI) :-
+  ventana_algoritmo_genetico(CI),
+  send(Ventana, destroy).
 %
 
-%Ventana
+ventana_algoritmo_genetico(CI) :-
+  (resultado_algoritmo_para_usuario(CI, CIResultado) ->
+    ventana_perfil_algoritmo_genetico(CI, CIResultado);
+    ventana_sin_resultado_algoritmo_genetico(CI)).
+%
 
+% Ejecuta el algoritmo genetico global y busca la pareja asignada al usuario.
+resultado_algoritmo_para_usuario(CI, CIResultado) :-
+  matching_global(Asignacion),
+  pareja_del_usuario(CI, Asignacion, CIResultado).
+%
+
+% Caso donde el usuario aparece primero en el par.
+pareja_del_usuario(CI, [(CI, Otro) | _], Otro) :-
+  !.
+
+% Caso donde el usuario aparece segundo en el par.
+pareja_del_usuario(CI, [(Otro, CI) | _], Otro) :-
+  !.
+
+% Caso recursivo: sigo buscando en los otros pares.
+pareja_del_usuario(CI, [_ | Resto], Resultado) :-
+  pareja_del_usuario(CI, Resto, Resultado).
+%
+
+ventana_perfil_algoritmo_genetico(CI, CIResultado) :-
+  perfil_nombre(CIResultado, Nombre),
+  perfil_caracteristicas(CIResultado, Caracteristicas),
+
+  new(Ventana, dialog('UM Match - Algoritmo Genetico')),
+  send(Ventana, size, size(800, 900)),
+
+  new(Titulo, label(titulo, 'Resultado del algoritmo genetico')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  % Nombre
+  mostrar_texto(Ventana, 'Nombre', Nombre, 80, 90),
+
+  % Cedula
+  mostrar_texto(Ventana, 'Cedula', CIResultado, 450, 90),
+
+  % Caracteristicas en dos columnas
+  mostrar_caracteristica(Ventana, Caracteristicas, sexo, 'Sexo', 80, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, estado_civil, 'Estado civil', 80, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, edad, 'Edad', 80, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, altura, 'Altura', 80, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, departamento, 'Departamento', 80, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, ojos, 'Ojos', 80, 545),
+
+  mostrar_caracteristica(Ventana, Caracteristicas, pelo, 'Pelo', 450, 170),
+  mostrar_caracteristica(Ventana, Caracteristicas, carrera, 'Carrera', 450, 245),
+  mostrar_caracteristica(Ventana, Caracteristicas, signo, 'Signo', 450, 320),
+  mostrar_caracteristica(Ventana, Caracteristicas, deporte, 'Deporte', 450, 395),
+  mostrar_caracteristica(Ventana, Caracteristicas, cita_ideal, 'Cita ideal', 450, 470),
+  mostrar_caracteristica(Ventana, Caracteristicas, fuma, 'Fuma', 450, 545),
+  mostrar_caracteristica(Ventana, Caracteristicas, toma, 'Toma', 450, 620),
+
+  % Coincidencias con mis preferencias
+  mostrar_coincidencias(Ventana, CI, CIResultado, 450, 685),
+
+  new(LabelEstado, label(label_estado, 'Estado')),
+  send(LabelEstado, font, font(verdana, bold, 16)),
+  send(LabelEstado, colour, colour(@default, 143, 179, 226)),
+  send(Ventana, display, LabelEstado, point(80, 730)),
+
+  new(TextoEstado, label(texto_estado, 'Asignado por algoritmo genetico')),
+  send(TextoEstado, font, font(verdana, roman, 16)),
+  send(TextoEstado, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, TextoEstado, point(180, 730)),
+
+  new(BotonVolver, button('Volver al menu', message(@prolog, volver_menu, Ventana, CI))),
+  send(BotonVolver, font, font(verdana, bold, 18)),
+  send(BotonVolver, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonVolver, point(300, 800)),
+
+  send(Ventana, open).
+%
+
+ventana_sin_resultado_algoritmo_genetico(CI) :-
+  new(Ventana, dialog('UM Match - Algoritmo Genetico')),
+  send(Ventana, size, size(700, 500)),
+
+  new(Titulo, label(titulo, 'Algoritmo Genetico')),
+  send(Titulo, font, font(verdana, bold, 28)),
+  send(Titulo, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, append, Titulo),
+
+  new(Mensaje, label(mensaje, 'No se encontro un resultado para mostrar.')),
+  send(Mensaje, font, font(verdana, roman, 16)),
+  send(Mensaje, colour, colour(@default, 60, 60, 60)),
+  send(Ventana, display, Mensaje, point(110, 180)),
+
+  new(BotonVolver, button('Volver al menu', message(@prolog, volver_menu, Ventana, CI))),
+  send(BotonVolver, font, font(verdana, bold, 18)),
+  send(BotonVolver, colour, colour(@default, 49, 65, 122)),
+  send(Ventana, display, BotonVolver, point(250, 320)),
+
+  send(Ventana, open).
 %
 
 
-%----------------------------------------------------------------------------------------------------------------------------------------------------
-%Ver Matches
-%----------------------------------------------------------------------------------------------------------------------------------------------------
-abrir_matches(Ventana, CI):-
-  send(Ventana, destroy),
-  ventana_matches(CI).
-%
-
-%Ventana
-
-%
 
 
 %----------------------------------------------------------------------------------------------------------------------------------------------------
@@ -953,13 +1685,54 @@ abrir_matches(Ventana, CI):-
 
 abrir_preferencias(Ventana, CI):-
   send(Ventana, destroy),
-  ventana_definir_preferencias(CI).
+  ventana_definir_preferencias(CI, menu).
 %
 
 %Funcion auxiliar para acceder a las preferencias de la lista
-obtener_preferencia(Nombre, ListaPreferencias, Valor) :-
-  member(Termino, ListaPreferencias),
-  Termino =.. [Nombre, Valor].
+obtener_preferencia(sexo, ListaPreferencias, Valor) :-
+  member(pref(busca_sexo, Valor), ListaPreferencias).
+
+obtener_preferencia(fuma, ListaPreferencias, Valor) :-
+  member(pref(busca_fuma, Valor), ListaPreferencias).
+
+obtener_preferencia(toma, ListaPreferencias, Valor) :-
+  member(pref(busca_toma, Valor), ListaPreferencias).
+
+obtener_preferencia(estado_civil, ListaPreferencias, Valor) :-
+  member(pref(busca_estado_civil, Valor), ListaPreferencias).
+
+obtener_preferencia(edad_min, ListaPreferencias, Valor) :-
+  member(pref_rango(edad, Valor, _), ListaPreferencias).
+
+obtener_preferencia(edad_max, ListaPreferencias, Valor) :-
+  member(pref_rango(edad, _, Valor), ListaPreferencias).
+
+obtener_preferencia(altura_min, ListaPreferencias, Valor) :-
+  member(pref_rango(altura, Valor, _), ListaPreferencias).
+
+obtener_preferencia(altura_max, ListaPreferencias, Valor) :-
+  member(pref_rango(altura, _, Valor), ListaPreferencias).
+
+obtener_preferencia(departamento, ListaPreferencias, Valor) :-
+  member(pref(departamento, Valor), ListaPreferencias).
+
+obtener_preferencia(ojos, ListaPreferencias, Valor) :-
+  member(pref(ojos, Valor), ListaPreferencias).
+
+obtener_preferencia(pelo, ListaPreferencias, Valor) :-
+  member(pref(pelo, Valor), ListaPreferencias).
+
+obtener_preferencia(carrera, ListaPreferencias, Valor) :-
+  member(pref(carrera, Valor), ListaPreferencias).
+
+obtener_preferencia(signo, ListaPreferencias, Valor) :-
+  member(pref(signo, Valor), ListaPreferencias).
+
+obtener_preferencia(deporte, ListaPreferencias, Valor) :-
+  member(pref(deporte, Valor), ListaPreferencias).
+
+obtener_preferencia(cita_ideal, ListaPreferencias, Valor) :-
+  member(pref(cita_ideal, Valor), ListaPreferencias).
 %
 
 %Funcion para rellenar campos de texto

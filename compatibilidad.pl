@@ -144,6 +144,39 @@ por_que_compatible(CI1, CI2, Atributos) :-
     perfil_caracteristicas(CI2, Caracteristicas),
     coincidencias(Preferencias, Caracteristicas, Atributos).
 
+
+%Funciones auxiliares
+%Coincidencia de filtros
+coincide(pref(busca_sexo, Valor), Caracteristicas, sexo) :-
+    member(sexo(Valor), Caracteristicas).
+
+coincide(pref(busca_fuma, Valor), Caracteristicas, fuma) :-
+    member(fuma(Valor), Caracteristicas).
+
+coincide(pref(busca_toma, Valor), Caracteristicas, toma) :-
+    member(toma(Valor), Caracteristicas).
+
+coincide(pref(busca_estado_civil, Valor), Caracteristicas, estado_civil) :-
+    member(estado_civil(Valor), Caracteristicas).
+
+coincide(pref(excluye_signo, ListaExcluidos), Caracteristicas, signo) :-
+    member(signo(SignoOtro), Caracteristicas),
+    \+ member(SignoOtro, ListaExcluidos).
+
+
+%Coincidencia de caracteristicas normales
+coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
+    Buscado =.. [Atributo, Valor],
+    member(Buscado, Caracteristicas).
+
+%Coincidencai de rango
+coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
+    Buscado =.. [Atributo, ValorOtro],
+    member(Buscado, Caracteristicas),
+    ValorOtro >= Min,
+    ValorOtro =< Max.
+
+
 % coincidencias(+Preferencias, +Caracteristicas, -Atributos)
 % Recorre las preferencias y arma la lista de las que coinciden.
 coincidencias([], _, []).
@@ -170,3 +203,29 @@ compatibles_de(CI_usuario, Compatibles) :-
                 es_compatible(CI_usuario, CI_otro)
             ),
             Compatibles).
+
+
+% ============================================================
+% es_compatible_mutuo(+CI1, +CI2)
+% ============================================================
+% Verdadero si CI2 es compatible con CI1 y CI1 tambien es
+% compatible con CI2.
+% Es decir, ambos cumplen las preferencias del otro.
+% ============================================================
+es_compatible_mutuo(CI1, CI2) :-
+    es_compatible(CI1, CI2),
+    es_compatible(CI2, CI1).
+
+% ============================================================
+% compatibles_mutuos_de(+CI_usuario, -ListaCompatiblesMutuos)
+% ============================================================
+% Devuelve todos los perfiles que son compatibles mutuamente
+% con CI_usuario, excluyendose a si mismo.
+% ============================================================
+compatibles_mutuos_de(CI_usuario, CompatiblesMutuos) :-
+    findall(CI_otro,
+            (   perfil_caracteristicas(CI_otro, _),
+                CI_otro \= CI_usuario,
+                es_compatible_mutuo(CI_usuario, CI_otro)
+            ),
+            CompatiblesMutuos).
