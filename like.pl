@@ -1,1 +1,0 @@
-% algoritmo de comparacion 
