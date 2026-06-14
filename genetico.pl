@@ -20,7 +20,6 @@ ag_mutacion(0.3).
 
 % donde empieza. Agarra todos los perfiles, limpia el pool,
 % corre el genetico y muestra el resultado.
-
 matching_global(Asignacion) :-
     todos_los_usuarios(Todos),
     limpiar_pool(Todos, Pool, Excluidos),
@@ -35,16 +34,12 @@ matching_global(Asignacion) :-
     ).
 
 
-
-
-
 % lista de CIs de todos los usuarios del sistema
 todos_los_usuarios(Lista) :-
     findall(CI, perfil_preferencia(CI, _), Lista).
 
 % Elimina del pool a quienes no tienen ningun candidato valido
 % usa limpiar_pool_aux para revisar cada CI contra todos los demas.
-
 limpiar_pool(Pool, PoolFinal, Excluidos) :-
     limpiar_pool_aux(Pool, Pool, PoolFinal, Excluidos).
 
@@ -73,15 +68,10 @@ filtros_mutuos_ok(CI1, CI2) :-
     pasa_filtros(CI2, CI1).
 
 
-
-
-
-
 % AJUSTAR SI EL POOL ES IMPAR
 
 % Si el pool tiene cantidad impar de personas, saca al menos
 % compatible globalmente. Si es par, no hace nada.
-
 ajustar_pool(Pool, PoolFinal, SinPareja) :-
     length(Pool, Largo),
     ( Largo mod 2 =:= 1
@@ -92,11 +82,8 @@ ajustar_pool(Pool, PoolFinal, SinPareja) :-
        SinPareja = ninguno
     ).
 
-
-
 % Devuelve el CI cuya suma de compatibilidad mutua con sus
 % candidatos validos del pool es la mas baja.
-
 menos_compatible_global([P|Ps], Peor) :-
     suma_compat_global(P, [P|Ps], SP),
     menos_compatible_global(Ps, P, SP, Peor).
@@ -121,17 +108,11 @@ suma_compat_global(CI, Pool, Suma) :-
             Mutuas),
     sumlist(Mutuas, Suma).
 
-
 % ida + vuelta, porque compatible es asimetrico.
-
 compat_mutua(A, B, M) :-
     ( compatible(A, B, Ida) -> true ; Ida = 0 ),
     ( compatible(B, A, Vuelta) -> true ; Vuelta = 0 ),
     M is Ida + Vuelta.
-
-
-
-
 
 
 % ALGORITMO GENETICO
@@ -144,7 +125,6 @@ correr_genetico(Pool, Mejor) :-
     ag_generaciones(NumGen),
     evolucionar(NumGen, Pob, Mejor).
 
-
 % Genera N cromosomas aleatorios. 
 poblacion_inicial(0, _, []) :- !.
 poblacion_inicial(N, Pool, [Ind|Resto]) :-
@@ -152,7 +132,6 @@ poblacion_inicial(N, Pool, [Ind|Resto]) :-
     asignacion_aleatoria(Pool, Ind),
     N1 is N - 1,
     poblacion_inicial(N1, Pool, Resto).
-
 
 % Genera una asignacion aleatoria valida: mezcla el pool al azar
 % y arma parejas que pasen los filtros excluyentes mutuamente.
@@ -179,9 +158,6 @@ armar_pares([A, B | Resto], [(A, B) | OtrosPares]) :-
     armar_pares(Resto, OtrosPares).
 
 
-
-
-
 % --- FITNESS ---
 % nos dice que tan bueno es un cromosoma, es decir una asignacion
 
@@ -196,8 +172,6 @@ fitness_acum([(A, B) | Resto], Acum, F) :-
     compat_mutua(A, B, M),
     NuevoAcum is Acum + M,
     fitness_acum(Resto, NuevoAcum, F).
-
-
 
 
 % EVOLUCION 
@@ -232,11 +206,9 @@ generar_hijos(N, Pob, [Hijo | Resto]) :-
     generar_hijos(N1, Pob, Resto).
 
 
-
 % SELECCION POR TORNEO ---
 
 % Elige dos individuos al azar y devuelve el de mayor fitness.
-
 seleccion(Pob, Ganador) :-
     random_member(A, Pob),
     random_member(B, Pob),
@@ -247,9 +219,7 @@ seleccion(Pob, Ganador) :-
 
 % CRUCE 
 
-
 % Toma la primera mitad de P1 y completa con los pares de P2 que no repitan a nadie
-
 cruzar(P1, P2, Hijo) :-
     length(P1, Largo),
     Mitad is Largo // 2,
@@ -258,15 +228,12 @@ cruzar(P1, P2, Hijo) :-
     completar_pares(P2, YaUsadas, Resto),
     append(Frente, Resto, Hijo).
 
-
 % Saca todas las personas que ya estan en una lista de pares
 personas_en([], []).
 personas_en([(A, B) | Resto], [A, B | Personas]) :-
     personas_en(Resto, Personas).
 
-
 % Recorre P2 y agrega los pares donde ninguno de los dos esta ya en YaUsadas
-
 completar_pares([], _, []).
 completar_pares([(A, B) | Resto], YaUsadas, Pares) :-
     ( \+ member(A, YaUsadas), \+ member(B, YaUsadas)
@@ -278,10 +245,8 @@ completar_pares([(A, B) | Resto], YaUsadas, Pares) :-
 
 % MUTACION
 
-
 % Con probabilidad ag_mutacion, intercambia dos personas
 % entre dos pares distintos al azar.
-
 mutar(Ind, Mut) :-
     ag_mutacion(Prob),
     random(R),
@@ -289,7 +254,6 @@ mutar(Ind, Mut) :-
 
 
 % Elige dos pares al azar e intercambia un integrante de cada uno.
-
 mutar_swap(Ind, Mut) :-
     length(Ind, Largo),
     ( Largo >= 2
@@ -310,11 +274,7 @@ mutar_swap(Ind, Mut) :-
     ).
 
 
-
-
-
 % AUXILIARES
-
 
 mejor_de([P | Ps], Mejor) :-
     fitness(P, F),
@@ -338,9 +298,7 @@ reemplazar([H | T], N, X, [H | R]) :-
     N > 0, N1 is N - 1, reemplazar(T, N1, X, R).
 
 
-
 % REPORTES
-
 
 reportar_excluidos([]).
 reportar_excluidos([CI | Resto]) :-
