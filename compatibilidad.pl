@@ -60,6 +60,21 @@ coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
     ValorOtro >= Min,
     ValorOtro =< Max.
 
+%Funciones auxiliares
+%Coincidencia de filtros
+coincide(pref(busca_sexo, Valor), Caracteristicas, sexo) :-
+    member(sexo(Valor), Caracteristicas).
+
+coincide(pref(busca_fuma, Valor), Caracteristicas, fuma) :-
+    member(fuma(Valor), Caracteristicas).
+
+coincide(pref(busca_toma, Valor), Caracteristicas, toma) :-
+    member(toma(Valor), Caracteristicas).
+
+coincide(pref(busca_estado_civil, Valor), Caracteristicas, estado_civil) :-
+    member(estado_civil(Valor), Caracteristicas).
+
+
 % Calcula el puntaje que CI_otro obtiene segun las preferencias de CI_usuario. 
 % Primero pasa los 5 filtros; si falla alguno no es compatible. 
 % Si los pasa, suma los puntos atributo por atributo.
@@ -98,20 +113,6 @@ por_que_compatible(CI1, CI2, Atributos) :-
     perfil_preferencia(CI1, Preferencias),
     perfil_caracteristicas(CI2, Caracteristicas),
     coincidencias(Preferencias, Caracteristicas, Atributos).
-
-%Funciones auxiliares
-%Coincidencia de filtros
-coincide(pref(busca_sexo, Valor), Caracteristicas, sexo) :-
-    member(sexo(Valor), Caracteristicas).
-
-coincide(pref(busca_fuma, Valor), Caracteristicas, fuma) :-
-    member(fuma(Valor), Caracteristicas).
-
-coincide(pref(busca_toma, Valor), Caracteristicas, toma) :-
-    member(toma(Valor), Caracteristicas).
-
-coincide(pref(busca_estado_civil, Valor), Caracteristicas, estado_civil) :-
-    member(estado_civil(Valor), Caracteristicas).
 
 % Recorre las preferencias y arma la lista de las que coinciden.
 coincidencias([], _, []).
