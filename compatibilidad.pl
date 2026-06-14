@@ -1,21 +1,5 @@
 % Modulo de calculo de compatibilidad
 
-% Verdadero si la caracteristica del otro perfil cumple la preferencia. 
-% Si coincide, devuelve el nombre del atributo.
-%
-%   pref(Atributo, Valor): comparacion por igualdad
-%   pref_rango(Atributo, Min, Max):
-
-coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
-    Buscado =.. [Atributo, Valor],
-    member(Buscado, Caracteristicas).
-
-coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
-    Buscado =.. [Atributo, ValorOtro],
-    member(Buscado, Caracteristicas),
-    ValorOtro >= Min,
-    ValorOtro =< Max.
-
 % FILTROS EXCLUYENTES
 
 % Antes de calcular el puntaje, el perfil tiene que pasar los 5 filtros. 
@@ -58,6 +42,23 @@ pasa_filtro_signo(Preferencias, Caracteristicas) :-
     member(pref(excluye_signo, ListaExcluidos), Preferencias),
     member(signo(SignoOtro), Caracteristicas),
     \+ member(SignoOtro, ListaExcluidos).
+
+% CALCULO DE COMPATIBILIDAD
+
+% Chequea si una preferencia del usuario está en las características del otro perfil. 
+% Si se cumple, devuelve el nombre del atributo que coincidió.
+
+%Coincidencia de caracteristicas normales
+coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
+    Buscado =.. [Atributo, Valor],
+    member(Buscado, Caracteristicas).
+
+%Coincidencai de rango
+coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
+    Buscado =.. [Atributo, ValorOtro],
+    member(Buscado, Caracteristicas),
+    ValorOtro >= Min,
+    ValorOtro =< Max.
 
 % Calcula el puntaje que CI_otro obtiene segun las preferencias de CI_usuario. 
 % Primero pasa los 5 filtros; si falla alguno no es compatible. 
@@ -111,22 +112,6 @@ coincide(pref(busca_toma, Valor), Caracteristicas, toma) :-
 
 coincide(pref(busca_estado_civil, Valor), Caracteristicas, estado_civil) :-
     member(estado_civil(Valor), Caracteristicas).
-
-coincide(pref(excluye_signo, ListaExcluidos), Caracteristicas, signo) :-
-    member(signo(SignoOtro), Caracteristicas),
-    \+ member(SignoOtro, ListaExcluidos).
-
-%Coincidencia de caracteristicas normales
-coincide(pref(Atributo, Valor), Caracteristicas, Atributo) :-
-    Buscado =.. [Atributo, Valor],
-    member(Buscado, Caracteristicas).
-
-%Coincidencai de rango
-coincide(pref_rango(Atributo, Min, Max), Caracteristicas, Atributo) :-
-    Buscado =.. [Atributo, ValorOtro],
-    member(Buscado, Caracteristicas),
-    ValorOtro >= Min,
-    ValorOtro =< Max.
 
 % Recorre las preferencias y arma la lista de las que coinciden.
 coincidencias([], _, []).
