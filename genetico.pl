@@ -2,6 +2,11 @@
 % asignacion de parejas que maximiza la compatibilidad global.
 % Inspirado en The One (Netflix, 2021).
 
+% RECORDAR:
+% gen = una pareja
+% cromosoma = todas las parejas juntas
+% generación = lista de cromosomas
+
 
 %para quitar los wrnings por itercambiar las clausulas de perfil_nombre/2
 :- discontiguous perfil_nombre/2.
@@ -115,7 +120,9 @@ compat_mutua(A, B, M) :-
     M is Ida + Vuelta.
 
 
+% - - - - - - - - - - 
 % ALGORITMO GENETICO
+% - - - - - - - - - - 
 
 % Genera la poblacion inicial, evoluciona y devuelve la mejor
 % asignacion encontrada.
@@ -152,12 +159,6 @@ armar_pares_validos([_|Resto], Pares) :-
     armar_pares_validos(Resto, Pares).
 
 
-% Toma la lista de a dos y forma parejas.
-armar_pares([], []).
-armar_pares([A, B | Resto], [(A, B) | OtrosPares]) :-
-    armar_pares(Resto, OtrosPares).
-
-
 % --- FITNESS ---
 % nos dice que tan bueno es un cromosoma, es decir una asignacion
 
@@ -174,7 +175,7 @@ fitness_acum([(A, B) | Resto], Acum, F) :-
     fitness_acum(Resto, NuevoAcum, F).
 
 
-% EVOLUCION 
+% --- EVOLUCION ---
 
 % Evoluciona la poblacion por N generaciones
 evolucionar(0, Pob, Mejor) :- !, mejor_de(Pob, Mejor).
@@ -184,7 +185,7 @@ evolucionar(N, Pob, Mejor) :-
     N1 is N - 1,
     evolucionar(N1, Nueva, Mejor).
 
-%Genera una nueva poblacion del mismo tamaño. El mejor individuo de la generacion actual pasa 
+% Genera una nueva poblacion del mismo tamaño. El mejor individuo de la generacion actual pasa 
 % directo y el resto se genera combinando y mutando individuos seleccionados.
 nueva_generacion(Pob, Nueva) :-
     length(Pob, Tam),
@@ -206,7 +207,7 @@ generar_hijos(N, Pob, [Hijo | Resto]) :-
     generar_hijos(N1, Pob, Resto).
 
 
-% SELECCION POR TORNEO ---
+% --- SELECCION POR TORNEO ---
 
 % Elige dos individuos al azar y devuelve el de mayor fitness.
 seleccion(Pob, Ganador) :-
@@ -217,7 +218,7 @@ seleccion(Pob, Ganador) :-
     ( FA >= FB -> Ganador = A ; Ganador = B ).
 
 
-% CRUCE 
+% --- CRUCE ---
 
 % Toma la primera mitad de P1 y completa con los pares de P2 que no repitan a nadie
 cruzar(P1, P2, Hijo) :-
@@ -243,7 +244,7 @@ completar_pares([(A, B) | Resto], YaUsadas, Pares) :-
     ).
 
 
-% MUTACION
+% -- MUTACION ---
 
 % Con probabilidad ag_mutacion, intercambia dos personas
 % entre dos pares distintos al azar.
@@ -274,7 +275,7 @@ mutar_swap(Ind, Mut) :-
     ).
 
 
-% AUXILIARES
+% - AUXILIARES -
 
 mejor_de([P | Ps], Mejor) :-
     fitness(P, F),
@@ -298,7 +299,7 @@ reemplazar([H | T], N, X, [H | R]) :-
     N > 0, N1 is N - 1, reemplazar(T, N1, X, R).
 
 
-% REPORTES
+% - REPORTAJES -
 
 reportar_excluidos([]).
 reportar_excluidos([CI | Resto]) :-
