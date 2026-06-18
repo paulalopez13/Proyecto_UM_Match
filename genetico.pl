@@ -1,13 +1,3 @@
-% Objetivo: dado el pool completo de usuarios, encontrar la
-% asignacion de parejas que maximiza la compatibilidad global.
-% Inspirado en The One (Netflix, 2021).
-
-% RECORDAR:
-% gen = una pareja
-% cromosoma = todas las parejas juntas
-% generación = lista de cromosomas
-
-
 %para quitar los wrnings por itercambiar las clausulas de perfil_nombre/2
 :- discontiguous perfil_nombre/2.
 :- discontiguous perfil_caracteristicas/2.
