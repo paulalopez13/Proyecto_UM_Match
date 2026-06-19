@@ -1,8 +1,3 @@
-
-:- consult('perfiles.pl').
-:- consult('logica.pl').
-
-
 :- dynamic(like/2).   
 :- dynamic(match/2).   
 
