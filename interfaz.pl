@@ -1749,14 +1749,3 @@ cargar_valor_menu(Menu, NombrePreferencia, ListaPreferencias) :-
   (obtener_preferencia(NombrePreferencia, ListaPreferencias, Valor)->
     send(Menu, selection, Valor);
     true).
-  %
-
-
-
-
-
-
-
-
-
-

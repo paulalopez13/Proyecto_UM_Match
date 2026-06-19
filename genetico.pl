@@ -3,10 +3,6 @@
 :- discontiguous perfil_caracteristicas/2.
 :- discontiguous perfil_preferencia/2.
 
-:- consult('perfiles.pl').     
-:- consult('compatibilidad.pl'). 
-:- consult('opciones.pl').
-
 % parametros del algoritmo genetico
 ag_poblacion(50).
 ag_generaciones(100).
